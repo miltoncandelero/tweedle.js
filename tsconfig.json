@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"moduleResolution": "node",
+		"removeComments": true,
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"outDir": "dist",
+		"declaration": true,
+		"pretty": true,
+		"esModuleInterop": true
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+	],
+	"include": [
+		"src/**/*",
+		"test/**/*",
+	],
+	"compileOnSave": false,
+}

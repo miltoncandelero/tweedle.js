@@ -1,0 +1,1 @@
+{"version":3,"file":"tween.js","sources":["../src/Tween.ts"],"sourcesContent":["export class Tween\n{\n    static t = 4;\n    static prom = Promise.resolve();\n}\n"],"names":["Tween","Promise","resolve"],"mappings":"AAAaA,IAAAA,eAEFA,IAAI,EACJA,OAAOC,QAAQC"}
