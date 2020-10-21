@@ -1,23 +1,28 @@
 {
 	"compilerOptions": {
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"moduleResolution": "node",
-		"removeComments": true,
-		"sourceMap": true,
+		//Build dir
+		"outDir": "./dist/",
+		//linter
 		"noImplicitAny": true,
-		"outDir": "dist",
-		"declaration": true,
-		"pretty": true,
-		"esModuleInterop": true
+		"noImplicitReturns": true,
+		"noUnusedParameters": true,
+		"noUnusedLocals": true,
+		"noFallthroughCasesInSwitch": true,
+		//
+		"sourceMap": true,
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"target": "es2015",
 	},
 	"exclude": [
 		"node_modules",
 		"dist",
 	],
 	"include": [
-		"src/**/*",
-		"test/**/*",
+		"./src/**/*",
+		"./test/**/*",
 	],
-	"compileOnSave": false,
 }

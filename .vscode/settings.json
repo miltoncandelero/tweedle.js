@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/dist": true,
+        "**/node_modules": true
+    },
+    "files.eol": "\n",
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.format.enable": true,
+    "eslint.packageManager": "yarn",
+    "npm.packageManager": "yarn"
+}

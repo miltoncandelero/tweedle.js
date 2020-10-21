@@ -1,1 +1,3 @@
-{"version":3,"file":"tween.es.js","sources":["../src/Tween.ts"],"sourcesContent":["export class Tween\n{\n    static t = 4;\n    static prom = Promise.resolve();\n}\n"],"names":["Tween","Promise","resolve"],"mappings":"AAAaA,IAAAA,eAEFA,IAAI,EACJA,OAAOC,QAAQC"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:aa1703aebf434afeab685f2e84decafd3c13a02870c17bd3bfa292ce04495f0c
+size 261

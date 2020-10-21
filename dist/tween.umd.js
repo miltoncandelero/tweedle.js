@@ -1,2 +1,3 @@
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e=e||self).Tween={})}(this,function(e){var n=function(){};n.t=4,n.prom=Promise.resolve(),e.Tween=n});
-//# sourceMappingURL=tween.umd.js.map
+version https://git-lfs.github.com/spec/v1
+oid sha256:66945120b16e917dbd2076b2ed506673ca2de8ef88411f6c536df3a68744e27f
+size 284
