@@ -1,7 +1,8 @@
 {
 	"compilerOptions": {
 		//Build dir
-		"outDir": "./dist/",
+		// "outFile": "index.d.ts",
+		"declaration": false,
 		//linter
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
@@ -23,6 +24,6 @@
 	],
 	"include": [
 		"./src/**/*",
-		"./test/**/*",
+		"./tests/**/*",
 	],
 }
