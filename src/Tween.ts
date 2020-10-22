@@ -9,7 +9,7 @@
 
 import type { EasingFunction } from "./Easing";
 import type { InterpolationFunction } from "./Interpolation";
-import type { Group } from "./Group";
+import { Group } from "./Group";
 import TWEEN from "./Index";
 
 export class Tween<T> {
@@ -18,7 +18,7 @@ export class Tween<T> {
 	private _valuesStart: any = {};
 	private _valuesEnd: any = {};
 	private _valuesStartRepeat: any = {};
-	private _duration = 1000;
+	private _duration = 0;
 	private _initialRepeat = 0;
 	private _repeat = 0;
 	private _repeatDelayTime?: number;
@@ -41,13 +41,17 @@ export class Tween<T> {
 	private _object: T;
 	private _group: Group;
 
-	constructor(object: T, group: Group = TWEEN) {
+	constructor(object: T, group: Group = Group.shared) {
 		this._object = object;
 		this._group = group;
 	}
 
 	public getId(): number {
 		return this._id;
+	}
+
+	public getGroup(): Group {
+		return this._group;
 	}
 
 	public isPlaying(): boolean {
@@ -59,6 +63,7 @@ export class Tween<T> {
 	}
 
 	public to(properties: RecursivePartial<T>, duration?: number): this;
+	public to(properties: any, duration?: number): this;
 	public to(properties: any, duration?: number): this {
 		this._valuesEnd = JSON.parse(JSON.stringify(properties));
 
@@ -120,13 +125,14 @@ export class Tween<T> {
 		for (const property in _valuesEnd) {
 			const startValue = _object[property];
 			const startValueIsArray = Array.isArray(startValue);
-			const startValueIsNumber = !Number.isNaN(startValue);
+			const startValueIsNumber = !Number.isNaN(Number(startValue));
 			const propType = startValueIsArray ? "array" : typeof startValue;
+			const startValueIsObject = propType === "object";
 			const isInterpolationList = !startValueIsArray && Array.isArray(_valuesEnd[property]);
 
 			// If `to()` specifies a property that doesn't exist in the source object,
 			// we should not set that property in the object
-			if (propType === "undefined" || propType === "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber)) {
+			if (propType === "undefined" || propType === "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber && !startValueIsObject)) {
 				continue;
 			}
 
@@ -146,7 +152,7 @@ export class Tween<T> {
 			}
 
 			// handle the deepness of the values
-			if ((propType === "object" || startValueIsArray) && startValue && !isInterpolationList) {
+			if ((startValueIsObject || startValueIsArray) && startValue && !isInterpolationList) {
 				_valuesStart[property] = startValueIsArray ? [] : {};
 
 				for (const prop in startValue as object) {
@@ -160,10 +166,6 @@ export class Tween<T> {
 				// Save the starting value, but only once.
 				if (typeof _valuesStart[property] === "undefined") {
 					_valuesStart[property] = startValue;
-				}
-
-				if (!startValueIsArray) {
-					_valuesStart[property] *= 1.0; // Ensures we're using numbers, not strings
 				}
 
 				if (isInterpolationList) {
@@ -436,7 +438,7 @@ export class Tween<T> {
 				continue;
 			}
 
-			const start = _valuesStart[property] || 0;
+			const start = _valuesStart[property];
 			let end = _valuesEnd[property];
 			const startIsArray = Array.isArray(_object[property]);
 			const endIsArray = Array.isArray(end);
@@ -448,11 +450,17 @@ export class Tween<T> {
 				this._updateProperties(_object[property], start, end, value);
 			} else {
 				// Parses relative end values with start as base (e.g.: +10, -3)
-				end = this._handleRelativeValue(start as number, end as number | string);
+				end = this._handleRelativeValue(start, end as number | string);
 
 				// Protect against non numeric properties.
-				if (typeof end === "number") {
-					_object[property] = start + (end - start) * value;
+				if (typeof end === "number" && (typeof start === "number" || typeof start === "string")) {
+					// I am certain that start here won't anser NaN or it would have been filtrated on the setupProperties
+					_object[property] = Number(start) + (end - Number(start)) * value;
+
+					// if it was originally a string, we make it back to string. keep it tidy
+					if (typeof start === "string") {
+						_object[property] = String(_object[property]);
+					}
 				}
 			}
 		}
@@ -483,7 +491,7 @@ export class Tween<T> {
 	}
 }
 
-export type RecursivePartial<T> = {
+type RecursivePartial<T> = {
 	[P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : RecursivePartial<T[P]>;
 };
 export default Tween;

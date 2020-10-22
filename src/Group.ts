@@ -8,33 +8,34 @@ import type { Tween } from "./Tween";
  * In these cases, you may want to create your own smaller groups of tween
  */
 export class Group {
-	private _tweens: {
+	public _tweens: {
 		[key: string]: Tween<any>;
 	} = {};
 
-	private _tweensAddedDuringUpdate: {
+	public _tweensAddedDuringUpdate: {
 		[key: string]: Tween<any>;
 	} = {};
+	public static shared: Group = new Group();
 
-	getAll(): Array<Tween<any>> {
+	public getAll(): Array<Tween<any>> {
 		return Object.keys(this._tweens).map((tweenId) => this._tweens[tweenId]);
 	}
 
-	removeAll(): void {
+	public removeAll(): void {
 		this._tweens = {};
 	}
 
-	add(tween: Tween<any>): void {
+	public add(tween: Tween<any>): void {
 		this._tweens[tween.getId()] = tween;
 		this._tweensAddedDuringUpdate[tween.getId()] = tween;
 	}
 
-	remove(tween: Tween<any>): void {
+	public remove(tween: Tween<any>): void {
 		delete this._tweens[tween.getId()];
 		delete this._tweensAddedDuringUpdate[tween.getId()];
 	}
 
-	update(time: number, preserve?: boolean): boolean {
+	public update(time: number, preserve?: boolean): boolean {
 		let tweenIds = Object.keys(this._tweens);
 
 		if (tweenIds.length === 0) {

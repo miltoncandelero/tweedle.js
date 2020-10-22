@@ -1,3 +1,4 @@
+import Easing from "../src/Easing";
 import { Group } from "../src/Group";
 import { Tween } from "../src/Tween";
 
@@ -32,12 +33,153 @@ test("Tween returns itself for chaining", () => {
 	expect(t.group(g)).toBeInstanceOf(Tween);
 });
 
+test("Tween existing property", () => {
+	const o = { a: 0 };
+	const t = new Tween(o).to({ a: 1 }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBe(0);
+
+	t.update(50);
+
+	expect(o.a).toBe(0.5);
+
+	t.update(100);
+
+	expect(o.a).toBe(1);
+});
+
+test("Tween non-existing property", () => {
+	const o: any = { a: 0 };
+	const target: any = { b: 1 }; // if written inline, typescript gets angry
+	const t = new Tween(o).to(target, 100).start(0);
+
+	expect(o.a).toBe(0);
+	expect(o.b).toBeUndefined();
+
+	t.update(100);
+
+	expect(o.a).toBe(0);
+	expect(o.b).toBeUndefined();
+});
+
+test("Tween string property if Number() returns not NaN", () => {
+	const o = { a: "0" };
+	const t = new Tween(o).to({ a: "1" }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBe("0");
+
+	t.update(50);
+
+	expect(o.a).toBe("0.5");
+
+	t.update(100);
+
+	expect(o.a).toBe("1");
+});
+
+test("Don't tween string property if Number() is NaN", () => {
+	const o = { a: "taco" };
+	const t = new Tween(o).to({ a: 1 }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBe("taco");
+
+	t.update(50);
+
+	expect(o.a).toBe("taco");
+
+	t.update(100);
+
+	expect(o.a).toBe("taco");
+});
+
+test("Don't tween boolean properties", () => {
+	const o = { a: false };
+	const t = new Tween(o).to({ a: true }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBe(false);
+
+	t.update(50);
+
+	expect(o.a).toBe(false);
+
+	t.update(100);
+
+	expect(o.a).toBe(false);
+});
+
+test("Don't tween undefined properties", () => {
+	const o: any = { a: undefined };
+	const t = new Tween(o).to({ a: 1 }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBeUndefined();
+
+	t.update(50);
+
+	expect(o.a).toBeUndefined();
+
+	t.update(100);
+
+	expect(o.a).toBeUndefined();
+});
+
+test("Don't tween null properties", () => {
+	const o: any = { a: null };
+	const t = new Tween(o).to({ a: 1 }, 100).start(0).easing(Easing.Linear.None);
+
+	expect(o.a).toBeNull();
+
+	t.update(50);
+
+	expect(o.a).toBeNull();
+
+	t.update(100);
+
+	expect(o.a).toBeNull();
+});
+
+// to continue: relative tweens
+
+test("Tween with no group will use Group.shared", () => {
+	const t = new Tween({});
+	expect(t.getGroup()).toBe(Group.shared);
+});
+
 test("Tween.start adds the tween to its group", () => {
-	// if tween isn't ruinning yet, group is still empty
 	const g = new Group();
 	const t = new Tween({}, g);
 	t.start();
 	expect(g.getAll()).toHaveLength(1);
+});
+
+test("Tween.update removes itself from its Group when complete", () => {
+	const g = new Group();
+
+	const t = new Tween({ a: 0 }, g).to({ a: 1 }, 300).start(0);
+
+	expect(g.getAll()).toBeInstanceOf(Array);
+	expect(g.getAll()).toHaveLength(1);
+	expect(g.getAll()).toContain(t);
+
+	t.update(400);
+
+	expect(g.getAll()).toBeInstanceOf(Array);
+	expect(g.getAll()).toHaveLength(0);
+});
+
+test("Tween.update can rewind", () => {
+	const g = new Group();
+	const o = { a: 0 };
+	const t = new Tween(o, g).to({ a: 1 }, 100).start(0);
+
+	expect(o.a).toBe(0);
+
+	t.update(200);
+
+	expect(o.a).toBe(1);
+
+	t.update(0);
+
+	expect(o.a).toBe(0);
 });
 
 test("Tween with complex properties", () => {
