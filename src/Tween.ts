@@ -9,7 +9,7 @@
 
 import type { EasingFunction } from "./Easing";
 import type { InterpolationFunction } from "./Interpolation";
-import type Group from "./Group";
+import type { Group } from "./Group";
 import TWEEN from "./Index";
 
 export class Tween<T> {
@@ -46,20 +46,20 @@ export class Tween<T> {
 		this._group = group;
 	}
 
-	getId(): number {
+	public getId(): number {
 		return this._id;
 	}
 
-	isPlaying(): boolean {
+	public isPlaying(): boolean {
 		return this._isPlaying;
 	}
 
-	isPaused(): boolean {
+	public isPaused(): boolean {
 		return this._isPaused;
 	}
 
-	to(properties: RecursivePartial<T>, duration?: number): this;
-	to(properties: any, duration?: number): this {
+	public to(properties: RecursivePartial<T>, duration?: number): this;
+	public to(properties: any, duration?: number): this {
 		this._valuesEnd = JSON.parse(JSON.stringify(properties));
 
 		if (duration !== undefined) {
@@ -69,13 +69,13 @@ export class Tween<T> {
 		return this;
 	}
 
-	duration(d: number): this {
+	public duration(d: number): this {
 		this._duration = d;
 
 		return this;
 	}
 
-	start(time?: number): this {
+	public start(time?: number): this {
 		if (this._isPlaying) {
 			return this;
 		}
@@ -175,7 +175,7 @@ export class Tween<T> {
 		}
 	}
 
-	stop(): this {
+	public stop(): this {
 		if (!this._isChainStopped) {
 			this._isChainStopped = true;
 			this.stopChainedTweens();
@@ -198,13 +198,13 @@ export class Tween<T> {
 		return this;
 	}
 
-	end(): this {
+	public end(): this {
 		this.update(Infinity);
 
 		return this;
 	}
 
-	pause(time: number): this {
+	public pause(time: number): this {
 		if (this._isPaused || !this._isPlaying) {
 			return this;
 		}
@@ -218,7 +218,7 @@ export class Tween<T> {
 		return this;
 	}
 
-	resume(time: number): this {
+	public resume(time: number): this {
 		if (!this._isPaused || !this._isPlaying) {
 			return this;
 		}
@@ -234,7 +234,7 @@ export class Tween<T> {
 		return this;
 	}
 
-	stopChainedTweens(): this {
+	public stopChainedTweens(): this {
 		for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
 			this._chainedTweens[i].stop();
 		}
@@ -242,86 +242,100 @@ export class Tween<T> {
 		return this;
 	}
 
-	group(group: Group): this {
+	public group(group: Group): this {
 		this._group = group;
 
 		return this;
 	}
 
-	delay(amount: number): this {
+	public delay(amount: number): this {
 		this._delayTime = amount;
 
 		return this;
 	}
 
-	repeat(times: number): this {
+	public repeat(times: number): this {
 		this._initialRepeat = times;
 		this._repeat = times;
 
 		return this;
 	}
 
-	repeatDelay(amount: number): this {
+	public repeatDelay(amount: number): this {
 		this._repeatDelayTime = amount;
 
 		return this;
 	}
 
-	yoyo(yoyo: boolean): this {
+	public yoyo(yoyo: boolean): this {
 		this._yoyo = yoyo;
 
 		return this;
 	}
 
-	easing(easingFunction: EasingFunction): this {
+	public easing(easingFunction: EasingFunction): this {
 		this._easingFunction = easingFunction;
 
 		return this;
 	}
 
-	interpolation(interpolationFunction: InterpolationFunction): this {
+	public interpolation(interpolationFunction: InterpolationFunction): this {
 		this._interpolationFunction = interpolationFunction;
 
 		return this;
 	}
 
-	chain(...tweens: Array<Tween<any>>): this {
+	public chain(...tweens: Array<Tween<any>>): this {
 		this._chainedTweens = tweens;
 
 		return this;
 	}
 
-	onStart(callback: (object: T) => void): this {
+	public onStart(callback: (object: T) => void): this {
 		this._onStartCallback = callback;
 
 		return this;
 	}
 
-	onUpdate(callback: (object: T, elapsed: number) => void): this {
+	public onUpdate(callback: (object: T, elapsed: number) => void): this {
 		this._onUpdateCallback = callback;
 
 		return this;
 	}
 
-	onRepeat(callback: (object: T) => void): this {
+	public onRepeat(callback: (object: T) => void): this {
 		this._onRepeatCallback = callback;
 
 		return this;
 	}
 
-	onComplete(callback: (object: T) => void): this {
+	public onComplete(callback: (object: T) => void): this {
 		this._onCompleteCallback = callback;
 
 		return this;
 	}
 
-	onStop(callback: (object: T) => void): this {
+	public onStop(callback: (object: T) => void): this {
 		this._onStopCallback = callback;
 
 		return this;
 	}
 
-	update(time?: number): boolean {
+	public update(time?: number): boolean {
+		const retval = this.internalUpdate(time);
+		if (!retval) {
+			this._group.remove(this);
+		}
+		return retval;
+	}
+
+	/**
+	 * Internals update
+	 * @internal
+	 * @param [time]
+	 * @returns true if update
+	 */
+	public internalUpdate(time?: number): boolean {
 		let property;
 		let elapsed;
 

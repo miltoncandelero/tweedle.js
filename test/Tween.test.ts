@@ -1,10 +1,11 @@
-import TWEEN from "../src/Index";
+import { Group } from "../src/Group";
 import { Tween } from "../src/Tween";
 
 test("Tween returns itself for chaining", () => {
-	const t = new Tween({});
+	const g = new Group();
+	const t = new Tween({}, g);
 
-	// expect(t.to({}, 0)).toBeInstanceOf(Tween);
+	expect(t.to({}, 0)).toBeInstanceOf(Tween);
 
 	expect(t.start()).toBeInstanceOf(Tween);
 
@@ -14,7 +15,7 @@ test("Tween returns itself for chaining", () => {
 
 	expect(t.easing((k) => k)).toBeInstanceOf(Tween);
 
-	expect(t.interpolation((v, k) => k)).toBeInstanceOf(Tween);
+	expect(t.interpolation((_, k) => k)).toBeInstanceOf(Tween);
 
 	expect(t.chain()).toBeInstanceOf(Tween);
 
@@ -28,39 +29,43 @@ test("Tween returns itself for chaining", () => {
 
 	expect(t.duration(1)).toBeInstanceOf(Tween);
 
-	expect(t.group(TWEEN)).toBeInstanceOf(Tween);
+	expect(t.group(g)).toBeInstanceOf(Tween);
+});
+
+test("Tween.start adds the tween to its group", () => {
+	// if tween isn't ruinning yet, group is still empty
+	const g = new Group();
+	const t = new Tween({}, g);
+	t.start();
+	expect(g.getAll()).toHaveLength(1);
 });
 
 test("Tween with complex properties", () => {
 	const obj = { x: 0.0, y: 100, some: { value: 0.0, style: { opacity: 1.0 }, unused: 100 } };
-	const t = new TWEEN.Tween(obj);
+	const g = new Group();
+	const t = new Tween(obj, g);
 
 	t.to({ x: 1.0, y: 200, some: { value: 1.0, style: { opacity: 0.5 } } }, 1000);
 
-	TWEEN.removeAll();
-
-	expect(TWEEN.getAll()).toHaveLength(0);
-
 	t.start(0);
-	expect(TWEEN.getAll()).toHaveLength(1);
 
 	expect(t.isPaused()).toBe(false);
 
-	TWEEN.update(400);
+	g.update(400);
 
 	expect(obj.x).toBe(0.4);
 	expect(obj.y).toBe(140);
 	expect(obj.some.style.opacity).toBe(0.8);
 	expect(obj.some.value).toBe(0.4);
 
-	TWEEN.update(750);
+	g.update(750);
 
 	expect(obj.x).toBe(0.75);
 	expect(obj.y).toBe(175);
 	expect(obj.some.style.opacity).toBe(0.625);
 	expect(obj.some.value).toBe(0.75);
 
-	TWEEN.update(1000);
+	g.update(1000);
 
 	expect(obj.x).toBe(1.0);
 	expect(obj.y).toBe(200);

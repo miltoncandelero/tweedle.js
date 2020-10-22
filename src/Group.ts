@@ -7,7 +7,7 @@ import type { Tween } from "./Tween";
  * Using the TWEEN singleton to manage your tweens can cause issues in large apps with many components.
  * In these cases, you may want to create your own smaller groups of tween
  */
-export default class Group {
+export class Group {
 	private _tweens: {
 		[key: string]: Tween<any>;
 	} = {};
@@ -54,7 +54,7 @@ export default class Group {
 			for (let i = 0; i < tweenIds.length; i++) {
 				const tween = this._tweens[tweenIds[i]];
 
-				if (tween && tween.update(time) === false && !preserve) {
+				if (tween && tween.internalUpdate(time) === false && !preserve) {
 					delete this._tweens[tweenIds[i]];
 				}
 			}

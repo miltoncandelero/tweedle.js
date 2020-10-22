@@ -8,11 +8,11 @@
  */
 
 import NOW from "./Now";
-import Group from "./Group";
+import { Group } from "./Group";
 import Easing from "./Easing";
 import Interpolation from "./Interpolation";
 import Sequence from "./Sequence";
-import Tween from "./Tween";
+import { Tween } from "./Tween";
 import VERSION from "./Version";
 
 /**
@@ -21,7 +21,7 @@ import VERSION from "./Version";
  * Using the TWEEN singleton to manage your tweens can cause issues in large apps with many components.
  * In these cases, you may want to create your own smaller groups of tween
  */
-class Main extends Group {
+class SingletonGroup extends Group {
 	public version = VERSION;
 	public now = NOW;
 	public Group = Group;
@@ -31,6 +31,6 @@ class Main extends Group {
 	public Tween = Tween;
 }
 
-const TWEEN = new Main();
+const TWEEN = new SingletonGroup();
 
 export default TWEEN;

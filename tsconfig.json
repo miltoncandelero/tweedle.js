@@ -15,7 +15,7 @@
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
 		"experimentalDecorators": true,
-		"target": "es2015",
+		"target": "ESNext",
 	},
 	"exclude": [
 		"node_modules",
