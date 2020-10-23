@@ -27,6 +27,7 @@ export class Tween<T> {
 	private _reversed = false;
 	private _delayTime = 0;
 	private _startTime = 0;
+	private _elapsedTime = 0;
 	private _easingFunction: EasingFunction = TWEEN.Easing.Linear.None;
 	private _interpolationFunction: InterpolationFunction = TWEEN.Interpolation.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
@@ -48,6 +49,10 @@ export class Tween<T> {
 
 	public getId(): number {
 		return this._id;
+	}
+
+	public getElapsedTime(): number {
+		return this._elapsedTime;
 	}
 
 	public getGroup(): Group {
@@ -80,7 +85,7 @@ export class Tween<T> {
 		return this;
 	}
 
-	public start(time?: number): this {
+	public start(extraDelay: number = 0): this {
 		if (this._isPlaying) {
 			return this;
 		}
@@ -109,12 +114,11 @@ export class Tween<T> {
 
 		this._isChainStopped = false;
 
-		if (time !== undefined) {
-			this._startTime = typeof time === "string" ? TWEEN.now() + parseFloat(time) : time;
-		} else {
-			this._startTime = TWEEN.now();
-		}
-		this._startTime += this._delayTime;
+		this._startTime = -extraDelay; // extra delay is a delay that doesn't come back on repeats
+
+		this._startTime -= this._delayTime;
+
+		this._elapsedTime = 0;
 
 		this._setupProperties(this._object, this._valuesStart, this._valuesEnd, this._valuesStartRepeat);
 
@@ -256,7 +260,7 @@ export class Tween<T> {
 		return this;
 	}
 
-	public repeat(times: number): this {
+	public repeat(times: number = Infinity): this {
 		this._initialRepeat = times;
 		this._repeat = times;
 
@@ -269,7 +273,7 @@ export class Tween<T> {
 		return this;
 	}
 
-	public yoyo(yoyo: boolean): this {
+	public yoyo(yoyo: boolean = true): this {
 		this._yoyo = yoyo;
 
 		return this;
@@ -323,8 +327,8 @@ export class Tween<T> {
 		return this;
 	}
 
-	public update(time?: number): boolean {
-		const retval = this.internalUpdate(time);
+	public update(deltaTime: number): boolean {
+		const retval = this.internalUpdate(deltaTime);
 		if (!retval) {
 			this._group.remove(this);
 		}
@@ -334,28 +338,25 @@ export class Tween<T> {
 	/**
 	 * Internals update
 	 * @internal
-	 * @param [time]
+	 * @param [deltaTime]
 	 * @returns true if update
 	 */
-	public internalUpdate(time?: number): boolean {
+	public internalUpdate(deltaTime: number): boolean {
 		let property;
 		let elapsed;
 
-		time = time !== undefined ? time : TWEEN.now();
+		this._elapsedTime += deltaTime;
 
-		const endTime = this._startTime + this._duration;
+		const endTime = this._duration;
+		const currentTime = this._startTime + this._elapsedTime;
 
-		if (time > endTime && !this._isPlaying) {
+		if (currentTime > endTime && !this._isPlaying) {
 			return false;
 		}
 
 		// If the tween was already finished,
 		if (!this.isPlaying) {
-			this.start(time);
-		}
-
-		if (time < this._startTime) {
-			return true;
+			this.start();
 		}
 
 		if (this._onStartCallbackFired === false) {
@@ -366,8 +367,15 @@ export class Tween<T> {
 			this._onStartCallbackFired = true;
 		}
 
-		elapsed = (time - this._startTime) / this._duration;
-		elapsed = this._duration === 0 || elapsed > 1 ? 1 : elapsed;
+		elapsed = this._elapsedTime / this._duration;
+		// zero duration = instacomplete.
+		elapsed = this._duration === 0 ? 1 : elapsed;
+		// otherwise, clamp the result
+		elapsed = Math.min(1, elapsed);
+		elapsed = Math.max(0, elapsed);
+
+		const leftOverTime = this._elapsedTime % this._duration; // leftover time
+		const loopsMade = Math.round(this._elapsedTime / this._duration); // if we overloop, how many loops did we eat?
 
 		const value = this._easingFunction(elapsed);
 
@@ -381,9 +389,8 @@ export class Tween<T> {
 		if (elapsed === 1) {
 			if (this._repeat > 0) {
 				if (isFinite(this._repeat)) {
-					this._repeat--;
+					this._repeat -= loopsMade;
 				}
-
 				// Reassign starting values, restart by making startTime = now
 				for (property in this._valuesStartRepeat) {
 					if (!this._yoyo && typeof this._valuesEnd[property] === "string") {
@@ -402,16 +409,23 @@ export class Tween<T> {
 				}
 
 				if (this._repeatDelayTime !== undefined) {
-					this._startTime = time + this._repeatDelayTime;
+					this._startTime = -this._repeatDelayTime;
 				} else {
-					this._startTime = time + this._delayTime;
+					this._startTime = -this._delayTime;
 				}
 
 				if (this._onRepeatCallback) {
 					this._onRepeatCallback(this._object);
 				}
 
-				return true;
+				this._elapsedTime = 0; // reset the elapsed time
+
+				// if we have more loops to go, then go
+				if (this._repeat > 0) {
+					return this.internalUpdate(leftOverTime); // update with the leftover time
+				} else {
+					return false;
+				}
 			}
 			if (this._onCompleteCallback) {
 				this._onCompleteCallback(this._object);

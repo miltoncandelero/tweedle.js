@@ -17,6 +17,12 @@ export class Group {
 	} = {};
 	public static shared: Group = new Group();
 
+	private _elapsedTime = 0;
+
+	private _lastUpdateTime: number = undefined;
+
+	public now: () => number = NOW; // used to calculate deltatime in case you stop providing one
+
 	public getAll(): Array<Tween<any>> {
 		return Object.keys(this._tweens).map((tweenId) => this._tweens[tweenId]);
 	}
@@ -35,14 +41,30 @@ export class Group {
 		delete this._tweensAddedDuringUpdate[tween.getId()];
 	}
 
-	public update(time: number, preserve?: boolean): boolean {
+	public getElapsedTime(): number {
+		return this._elapsedTime;
+	}
+
+	public update(deltaTime?: number, preserve?: boolean): boolean {
 		let tweenIds = Object.keys(this._tweens);
+
+		if (deltaTime == undefined) {
+			// now varies from line to line, that's why I manually use 0 as dt
+			if (this._lastUpdateTime == undefined) {
+				this._lastUpdateTime = this.now();
+				deltaTime = 0;
+			} else {
+				deltaTime = this.now() - this._lastUpdateTime;
+			}
+		}
+
+		this._lastUpdateTime = this.now();
+
+		this._elapsedTime += deltaTime;
 
 		if (tweenIds.length === 0) {
 			return false;
 		}
-
-		time = time !== undefined ? time : NOW();
 
 		// Tweens are updated in "batches". If you add a new tween during an
 		// update, then the new tween will be updated in the next batch.
@@ -55,7 +77,7 @@ export class Group {
 			for (let i = 0; i < tweenIds.length; i++) {
 				const tween = this._tweens[tweenIds[i]];
 
-				if (tween && tween.internalUpdate(time) === false && !preserve) {
+				if (tween && tween.internalUpdate(deltaTime) === false && !preserve) {
 					delete this._tweens[tweenIds[i]];
 				}
 			}
