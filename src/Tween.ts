@@ -70,7 +70,25 @@ export class Tween<T> {
 	public to(properties: RecursivePartial<T>, duration?: number): this;
 	public to(properties: any, duration?: number): this;
 	public to(properties: any, duration?: number): this {
-		this._valuesEnd = JSON.parse(JSON.stringify(properties));
+		try {
+			this._valuesEnd = JSON.parse(JSON.stringify(properties));
+		} catch (e) {
+			// recursive object. this gonna crash!
+			console.warn("Your target object has a circular reference. It can't be cloned. Falling back to dynamic targeting");
+			return this.dynamicTo(properties, duration);
+		}
+
+		if (duration !== undefined) {
+			this._duration = duration;
+		}
+
+		return this;
+	}
+
+	public dynamicTo(properties: RecursivePartial<T>, duration?: number): this;
+	public dynamicTo(properties: any, duration?: number): this;
+	public dynamicTo(properties: any, duration?: number): this {
+		this._valuesEnd = properties; // JSON.parse(JSON.stringify(properties));
 
 		if (duration !== undefined) {
 			this._duration = duration;
@@ -394,7 +412,7 @@ export class Tween<T> {
 				// Reassign starting values, restart by making startTime = now
 				for (property in this._valuesStartRepeat) {
 					if (!this._yoyo && typeof this._valuesEnd[property] === "string") {
-						this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + parseFloat(this._valuesEnd[property]);
+						this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + Number(this._valuesEnd[property]);
 					}
 
 					if (this._yoyo) {
@@ -486,17 +504,17 @@ export class Tween<T> {
 		}
 
 		if (end.charAt(0) === "+" || end.charAt(0) === "-") {
-			return start + parseFloat(end);
+			return start + Number(end);
 		}
 
-		return parseFloat(end);
+		return Number(end);
 	}
 
 	private _swapEndStartRepeatValues(property: string): void {
 		const tmp = this._valuesStartRepeat[property];
 
 		if (typeof this._valuesEnd[property] === "string") {
-			this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + parseFloat(this._valuesEnd[property]);
+			this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + Number(this._valuesEnd[property]);
 		} else {
 			this._valuesStartRepeat[property] = this._valuesEnd[property];
 		}
