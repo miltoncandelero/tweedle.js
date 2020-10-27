@@ -67,6 +67,12 @@ export class Tween<T> {
 		return this._isPaused;
 	}
 
+	public from(properties: RecursivePartial<T>): this;
+	public from(properties: any): this;
+	public from(properties: any): this {
+		this._setupProperties(properties, this._valuesStart, properties, this._valuesStartRepeat);
+		return this;
+	}
 	public to(properties: RecursivePartial<T>, duration?: number): this;
 	public to(properties: any, duration?: number): this;
 	public to(properties: any, duration?: number): this {
@@ -103,9 +109,13 @@ export class Tween<T> {
 		return this;
 	}
 
-	public start(extraDelay: number = 0): this {
+	public start(delay?: number): this {
 		if (this._isPlaying) {
 			return this;
+		}
+
+		if (delay != undefined) {
+			this._delayTime = delay;
 		}
 
 		this._group.add(this);
@@ -118,10 +128,8 @@ export class Tween<T> {
 
 			this._reversed = false;
 
-			for (const property in this._valuesStartRepeat) {
-				this._swapEndStartRepeatValues(property);
-				this._valuesStart[property] = this._valuesStartRepeat[property];
-			}
+			this._swapEndStartRepeatValues(this._valuesStartRepeat, this._valuesEnd);
+			this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
 		}
 
 		this._isPlaying = true;
@@ -132,9 +140,7 @@ export class Tween<T> {
 
 		this._isChainStopped = false;
 
-		this._startTime = -extraDelay; // extra delay is a delay that doesn't come back on repeats
-
-		this._startTime -= this._delayTime;
+		this._startTime = -this._delayTime;
 
 		this._elapsedTime = 0;
 
@@ -176,12 +182,7 @@ export class Tween<T> {
 			// handle the deepness of the values
 			if ((startValueIsObject || startValueIsArray) && startValue && !isInterpolationList) {
 				_valuesStart[property] = startValueIsArray ? [] : {};
-
-				for (const prop in startValue as object) {
-					_valuesStart[property][prop] = startValue[prop];
-				}
-
-				_valuesStartRepeat[property] = startValueIsArray ? [] : {}; // TODO? repeat nested values? And yoyo? And array values?
+				_valuesStartRepeat[property] = startValueIsArray ? [] : {};
 
 				this._setupProperties(startValue, _valuesStart[property], _valuesEnd[property], _valuesStartRepeat[property]);
 			} else {
@@ -360,7 +361,6 @@ export class Tween<T> {
 	 * @returns true if update
 	 */
 	public internalUpdate(deltaTime: number): boolean {
-		let property;
 		let elapsed;
 
 		this._elapsedTime += deltaTime;
@@ -385,51 +385,57 @@ export class Tween<T> {
 			this._onStartCallbackFired = true;
 		}
 
-		elapsed = this._elapsedTime / this._duration;
+		elapsed = currentTime / this._duration;
 		// zero duration = instacomplete.
 		elapsed = this._duration === 0 ? 1 : elapsed;
 		// otherwise, clamp the result
 		elapsed = Math.min(1, elapsed);
 		elapsed = Math.max(0, elapsed);
 
-		const leftOverTime = this._elapsedTime % this._duration; // leftover time
-		const loopsMade = Math.round(this._elapsedTime / this._duration); // if we overloop, how many loops did we eat?
+		const leftOverTime = currentTime % this._duration; // leftover time
+		const loopsMade = Math.round(currentTime / this._duration); // if we overloop, how many loops did we eat?
 
 		const value = this._easingFunction(elapsed);
 
 		// properties transformations
 		this._updateProperties(this._object, this._valuesStart, this._valuesEnd, value);
 
-		if (this._onUpdateCallback) {
+		// if there is absolutely no chance to loop, call update. we will be done.
+		if (this._onUpdateCallback && (elapsed != 1 || this._repeat <= 0)) {
 			this._onUpdateCallback(this._object, elapsed);
 		}
 
 		if (elapsed === 1) {
 			if (this._repeat > 0) {
+				// substract loops
 				if (isFinite(this._repeat)) {
 					this._repeat -= loopsMade;
 				}
-				// Reassign starting values, restart by making startTime = now
-				for (property in this._valuesStartRepeat) {
-					if (!this._yoyo && typeof this._valuesEnd[property] === "string") {
-						this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + Number(this._valuesEnd[property]);
-					}
 
-					if (this._yoyo) {
-						this._swapEndStartRepeatValues(property);
-					}
-
-					this._valuesStart[property] = this._valuesStartRepeat[property];
+				if (this._onUpdateCallback && (this._repeat < 0 || leftOverTime <= 0)) {
+					this._onUpdateCallback(this._object, elapsed);
 				}
 
+				// fix starting values for yoyo or relative
+				if (this._yoyo) {
+					this._swapEndStartRepeatValues(this._valuesStartRepeat, this._valuesEnd);
+				} else {
+					this._moveForwardStartRepeatValues(this._valuesStartRepeat, this._valuesEnd);
+				}
+
+				// Reassign starting values
+				this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
+
+				// store yoyo state
 				if (this._yoyo) {
 					this._reversed = !this._reversed;
 				}
 
+				// restart start time
 				if (this._repeatDelayTime !== undefined) {
 					this._startTime = -this._repeatDelayTime;
 				} else {
-					this._startTime = -this._delayTime;
+					this._startTime = 0;
 				}
 
 				if (this._onRepeatCallback) {
@@ -439,8 +445,13 @@ export class Tween<T> {
 				this._elapsedTime = 0; // reset the elapsed time
 
 				// if we have more loops to go, then go
-				if (this._repeat > 0) {
-					return this.internalUpdate(leftOverTime); // update with the leftover time
+				if (this._repeat >= 0) {
+					// update with the leftover time
+					if (leftOverTime > 0) {
+						// only if it is greater than 0 and do not emit onupdate events...
+						this.internalUpdate(leftOverTime);
+					}
+					return true;
 				} else {
 					return false;
 				}
@@ -510,16 +521,33 @@ export class Tween<T> {
 		return Number(end);
 	}
 
-	private _swapEndStartRepeatValues(property: string): void {
-		const tmp = this._valuesStartRepeat[property];
+	private _swapEndStartRepeatValues(_valuesStartRepeat: any, _valuesEnd: any): void {
+		for (const property in _valuesStartRepeat) {
+			if (typeof _valuesStartRepeat[property] === "object") {
+				this._swapEndStartRepeatValues(_valuesStartRepeat[property], _valuesEnd[property]);
+			} else {
+				const tmp = _valuesStartRepeat[property];
+				if (typeof _valuesEnd[property] === "string") {
+					_valuesStartRepeat[property] = Number(_valuesStartRepeat[property]) + Number(_valuesEnd[property]);
+				} else {
+					_valuesStartRepeat[property] = _valuesEnd[property];
+				}
 
-		if (typeof this._valuesEnd[property] === "string") {
-			this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + Number(this._valuesEnd[property]);
-		} else {
-			this._valuesStartRepeat[property] = this._valuesEnd[property];
+				_valuesEnd[property] = tmp;
+			}
 		}
+	}
 
-		this._valuesEnd[property] = tmp;
+	private _moveForwardStartRepeatValues(_valuesStartRepeat: any, _valuesEnd: any): void {
+		for (const property in _valuesStartRepeat) {
+			if (typeof _valuesEnd[property] === "object") {
+				this._moveForwardStartRepeatValues(_valuesStartRepeat[property], _valuesEnd[property]);
+			} else {
+				if (typeof _valuesEnd[property] === "string") {
+					_valuesStartRepeat[property] = Number(_valuesStartRepeat[property]) + Number(_valuesEnd[property]);
+				}
+			}
+		}
 	}
 }
 
