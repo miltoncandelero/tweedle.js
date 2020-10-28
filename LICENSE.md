@@ -1,8 +1,10 @@
 The MIT License
 
-Original Tween.js work Copyright (c) 2010-2012 Tween.js authors.
+Tweedle.js Copyright (c) 2020 - Milton Candelero
 
-Easing equations Copyright (c) 2001 Robert Penner http://robertpenner.com/easing/
+Original Tween.js work Copyright (c) 2010-2012 Tween.js authors https://github.com/tweenjs/tween.js
+
+Easing equations Copyright (c) 2001 Robert Penner http://www.robertpenner.com/easing_terms_of_use.html
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

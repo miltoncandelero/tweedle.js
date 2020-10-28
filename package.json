@@ -1,9 +1,9 @@
 {
-  "name": "tween",
+  "name": "tweedle.js",
   "version": "0.0.1",
-  "description": "My own fork of tween.js | Better name pending",
+  "description": "Tweedle.js is a fork of tween.js made to fit my needs.",
   "source": "src/index.ts",
-  "main": "dist/tween.js",
+  "main": "dist/tweedle.js",
   "files": [
     "dist"
   ],
