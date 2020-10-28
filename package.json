@@ -41,6 +41,6 @@
     "build": "rimraf ./dist && microbundle --name Tween && tsc ./src/index.ts --emitDeclarationOnly --stripInternal -d --out ./dist/index.d.ts",
     "prepublishOnly": "npm run build",
     "test": "jest",
-    "doc": "rimraf ./docs && typedoc --mode library --out docs src/index.ts --excludeNotExported --excludePrivate --excludeProtected --stripInternal"
+    "doc": "rimraf ./docs && typedoc --mode library --out docs src/index.ts --excludeNotExported --excludePrivate --excludeProtected --stripInternal --theme minimal"
   }
 }
