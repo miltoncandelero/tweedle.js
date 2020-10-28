@@ -9,12 +9,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/miltoncandelero/tween.js.git"
+    "url": "git://github.com/miltoncandelero/tweedle.js.git"
   },
   "bugs": {
-    "url": "https://github.com/miltoncandelero/tween.js/issues"
+    "url": "https://github.com/miltoncandelero/tweedle.js/issues"
   },
-  "homepage": "https://github.com/miltoncandelero/tween.js",
+  "homepage": "https://github.com/miltoncandelero/tweedle.js",
   "keywords": [],
   "author": "Milton Candelero <miltoncandelero@gmail.com>",
   "license": "MIT",
