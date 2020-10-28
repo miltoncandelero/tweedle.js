@@ -8,11 +8,11 @@ import type { Tween } from "./Tween";
  * In these cases, you may want to create your own smaller groups of tween
  */
 export class Group {
-	public _tweens: {
+	private _tweens: {
 		[key: string]: Tween<any>;
 	} = {};
 
-	public _tweensAddedDuringUpdate: {
+	private _tweensAddedDuringUpdate: {
 		[key: string]: Tween<any>;
 	} = {};
 	public static shared: Group = new Group();
