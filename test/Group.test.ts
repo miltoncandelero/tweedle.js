@@ -128,3 +128,30 @@ test("Group.update() returns true while tweens are running and false when done",
 	expect(g.update(1)).toBe(true); // one passed
 	expect(g.update(1)).toBe(false); // two passed, tween should start now, duration is zero so it ends immediately
 });
+
+test("Tween with no group will use Group.shared", () => {
+	const t = new Tween({});
+	expect(t.getGroup()).toBe(Group.shared);
+});
+
+test("Tween.start adds the tween to its group", () => {
+	const g = new Group();
+	const t = new Tween({}, g);
+	t.start();
+	expect(g.getAll()).toHaveLength(1);
+});
+
+test("Tween.update removes itself from its Group when complete", () => {
+	const g = new Group();
+
+	const t = new Tween({ a: 0 }, g).to({ a: 1 }, 300).start();
+
+	expect(g.getAll()).toBeInstanceOf(Array);
+	expect(g.getAll()).toHaveLength(1);
+	expect(g.getAll()).toContain(t);
+
+	t.update(400);
+
+	expect(g.getAll()).toBeInstanceOf(Array);
+	expect(g.getAll()).toHaveLength(0);
+});
