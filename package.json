@@ -5,8 +5,10 @@
   "source": "src/index.ts",
   "main": "dist/tweedle.js",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
+  "types": "./types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/miltoncandelero/tweedle.js.git"
@@ -38,7 +40,7 @@
   },
   "scripts": {
     "lint": "eslint src/**/*.ts --fix && eslint tests/**/*.ts --fix",
-    "build": "rimraf ./dist && microbundle --name Tween && tsc ./src/index.ts --emitDeclarationOnly --stripInternal -d --out ./dist/index.d.ts",
+    "build": "rimraf ./dist && rimraf ./types && microbundle --name Tween && tsc ./src/index.ts --emitDeclarationOnly --stripInternal --target es5 -d --outDir ./types",
     "prepublishOnly": "npm run build",
     "test": "jest",
     "doc": "rimraf ./docs && typedoc --mode library --out docs src/index.ts --excludeNotExported --excludePrivate --excludeProtected --stripInternal --theme minimal"

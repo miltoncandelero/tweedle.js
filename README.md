@@ -1,3 +1,3 @@
-# WORK IN PROGRESS
+# Tweedle.js
 
-I haven't even thought of a name yet :|
+Tweedle.js is my fork of tween.js made to fit my needs at Killabunnies.
