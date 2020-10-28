@@ -41,6 +41,10 @@ export class Group {
 		delete this._tweensAddedDuringUpdate[tween.getId()];
 	}
 
+	/**
+	 * Gets elapsed time
+	 * @returns elapsed time
+	 */
 	public getElapsedTime(): number {
 		return this._elapsedTime;
 	}
