@@ -1,7 +1,13 @@
 export type EasingFunction = (amount: number) => number;
 
 /**
- * The Ease class provides a collection of easing functions for use with tween.js.
+ * The Ease class provides a collection of easing functions.
+ *
+ * These functions take in a parameter between 0 and 1 as the ratio and give out a new ratio.
+ *
+ * These are [Robert Penner](http://www.robertpenner.com/easing_terms_of_use.html)'s optimized formulas.
+ *
+ * Need help picking one? [Check this out!](https://easings.net/)
  */
 export const Easing = {
 	Linear: {

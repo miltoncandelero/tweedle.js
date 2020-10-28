@@ -1,34 +1,6 @@
 import { Group } from "../src/Group";
 import { Tween } from "../src/Tween";
 
-test("Group.update uses deltaTime instead of absolute time", () => {
-	// empty groups give empty array
-	const g = new Group();
-	expect(g.getElapsedTime()).toBe(0);
-	g.update(16);
-	expect(g.getElapsedTime()).toBe(16);
-	g.update(16);
-	expect(g.getElapsedTime()).toBe(32);
-});
-
-test("Group.update uses creates it's own deltatime if none provided", () => {
-	// empty groups give empty array
-	const g = new Group();
-	expect(g.getElapsedTime()).toBe(0);
-	g.update();
-	expect(g.getElapsedTime()).toBe(0);
-
-	// this is a bad test but I don't know how to make it better :(
-	const retval = new Promise((resolve) => {
-		setTimeout(() => {
-			g.update();
-			expect(g.getElapsedTime()).toBeGreaterThanOrEqual(1000);
-			resolve();
-		}, 1000);
-	});
-	return retval;
-});
-
 test("Group.getAll returns an array", () => {
 	// empty groups give empty array
 	const g = new Group();
@@ -122,8 +94,6 @@ test("Group.update() returns true while tweens are running and false when done",
 	expect(g.update(1)).toBe(false);
 
 	new Tween({}, g).start(2); // will start in 2
-
-	expect(g.getElapsedTime()).toBe(1);
 
 	expect(g.update(1)).toBe(true); // one passed
 	expect(g.update(1)).toBe(false); // two passed, tween should start now, duration is zero so it ends immediately

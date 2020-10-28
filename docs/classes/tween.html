@@ -2396,9 +2396,6 @@ img {
 					<a href="tween.html#from" class="tsd-kind-icon">from</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="tween.html#getelapsedtime" class="tsd-kind-icon">get<wbr>Elapsed<wbr>Time</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="tween.html#getgroup" class="tsd-kind-icon">get<wbr>Group</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -2439,6 +2436,9 @@ img {
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="tween.html#repeatdelay" class="tsd-kind-icon">repeat<wbr>Delay</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="tween.html#restart" class="tsd-kind-icon">restart</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="tween.html#resume" class="tsd-kind-icon">resume</a>
@@ -2482,11 +2482,26 @@ img {
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
+		<section class="tsd-panel tsd-comment">
+			<div class="tsd-comment tsd-typography">
+				<div class="lead">
+					<p>A Tween is basically an animation command.
+					For example: <em>Go from here to there in this amount of time.</em></p>
+				</div>
+				<p>Tweens won&#39;t start by themselves. <strong>Remeber to call <a href="tween.html#start">Tween.start</a> when you want your tweens to start!</strong></p>
+				<p>Most methods will return the same object to allow for daisy chaining.</p>
+				<dl class="tsd-comment-tags">
+					<dt>template</dt>
+					<dd><p>Target of the tween</p>
+					</dd>
+				</dl>
+			</div>
+		</section>
 		<section class="tsd-panel tsd-type-parameters">
 			<h3>Type parameters</h3>
 			<ul class="tsd-type-parameters">
 				<li>
-					<h4>T</h4>
+					<h4>Target</h4>
 				</li>
 			</ul>
 		</section>
@@ -2518,7 +2533,6 @@ img {
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#easing" class="tsd-kind-icon">easing</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#end" class="tsd-kind-icon">end</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#from" class="tsd-kind-icon">from</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#getelapsedtime" class="tsd-kind-icon">get<wbr>Elapsed<wbr>Time</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#getgroup" class="tsd-kind-icon">get<wbr>Group</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#getid" class="tsd-kind-icon">get<wbr>Id</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#group" class="tsd-kind-icon">group</a></li>
@@ -2533,6 +2547,7 @@ img {
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#pause" class="tsd-kind-icon">pause</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#repeat" class="tsd-kind-icon">repeat</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#repeatdelay" class="tsd-kind-icon">repeat<wbr>Delay</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#restart" class="tsd-kind-icon">restart</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#resume" class="tsd-kind-icon">resume</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#start" class="tsd-kind-icon">start</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="tween.html#stop" class="tsd-kind-icon">stop</a></li>
@@ -2552,22 +2567,37 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Tween<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, group<span class="tsd-signature-symbol">?: </span><a href="group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tween.html" class="tsd-signature-type">Tween</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Tween<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span>, group<span class="tsd-signature-symbol">?: </span><a href="group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tween.html" class="tsd-signature-type">Tween</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L43">Tween.ts:43</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L53">Tween.ts:53</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Creates an instance of tween.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>object: <span class="tsd-signature-type">T</span></h5>
+								<h5>object: <span class="tsd-signature-type">Target</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The target object which properties you want to animate</p>
+									</div>
+								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> group: <a href="group.html" class="tsd-signature-type">Group</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>The <a href="group.html">Group</a> this new Tween will belong to. If none is provided it will default to the static <a href="group.html#shared">Group.shared</a></p>
+									</div>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="tween.html" class="tsd-signature-type">Tween</a></h4>
@@ -2587,16 +2617,26 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L316">Tween.ts:316</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L483">Tween.ts:483</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds tweens to be called when this tween ends.
+								The tweens here will be called all at the same time.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>tweens: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>tweens to be started when this tween ends</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2610,16 +2650,26 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L273">Tween.ts:273</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L395">Tween.ts:395</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the delay for this tween.</p>
+							</div>
+							<p>This will only be applied at the start of the tween. For delaying the repeating of a tween, see <a href="tween.html#repeatdelay">Tween.repeatDelay</a></p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>amount: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the delay for this tween.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2633,16 +2683,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L109">Tween.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L167">Tween.ts:167</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the duration for this tween in <strong>miliseconds</strong>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>d: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The duration for this tween in <strong>miliseconds</strong>.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2650,31 +2709,45 @@ img {
 				<a name="dynamicto" class="tsd-anchor"></a>
 				<h3>dynamic<wbr>To</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">dynamic<wbr>To<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">dynamic<wbr>To<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					<li class="tsd-signature tsd-kind-icon">dynamic<wbr>To<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L97">Tween.ts:97</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L150">Tween.ts:150</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Set the final values for the target object&#39;s properties by reference.
+									This will store a reference to the properties object allowing you to change the final values while the tween is running.
+								If you want the tween to make a copy of the final values use <a href="tween.html#to">Tween.to</a>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>final values for the target object.</p>
+								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> duration: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>if given it will be used as the duration in <strong>miliseconds</strong>. if not, a call to <a href="tween.html#duration">Tween.duration</a> will be needed.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L98">Tween.ts:98</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L151">Tween.ts:151</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2700,16 +2773,26 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L304">Tween.ts:304</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L457">Tween.ts:457</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the easing function to interpolate the starting values with the final values.</p>
+							</div>
+							<p>You can use the functions inside the <a href="../globals.html#easing">Easing</a> object.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>easingFunction: <span class="tsd-signature-type">EasingFunction</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>a function that takes a number between 0 and 1 and returns another number between 0 and 1</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2723,10 +2806,17 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L229">Tween.ts:229</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L325">Tween.ts:325</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Fastforwards this tween to the end by triggering an update with an infinite value.
+								This will work even on paused tweens.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2734,28 +2824,40 @@ img {
 				<a name="from" class="tsd-anchor"></a>
 				<h3>from</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					<li class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L73">Tween.ts:73</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L105">Tween.ts:105</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>experimental</dt>
+								<dd><p>Writes the starting values of the tween.</p>
+									<p><strong>Starting values can&#39;t be overwritten. This function can&#39;t overwrite the starting values generated by <a href="tween.html#start">Tween.start</a></strong></p>
+								</dd>
+							</dl>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Starting values for this tween.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L74">Tween.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L106">Tween.ts:106</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2769,23 +2871,6 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="getelapsedtime" class="tsd-anchor"></a>
-				<h3>get<wbr>Elapsed<wbr>Time</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Elapsed<wbr>Time<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L57">Tween.ts:57</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="getgroup" class="tsd-anchor"></a>
 				<h3>get<wbr>Group</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -2795,10 +2880,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L61">Tween.ts:61</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L77">Tween.ts:77</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets <a href="group.html">Group</a> that this tween belongs to.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <a href="group.html" class="tsd-signature-type">Group</a></h4>
+						<p>returns the <a href="group.html">Group</a> for this tween.</p>
 					</li>
 				</ul>
 			</section>
@@ -2812,10 +2903,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L53">Tween.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L69">Tween.ts:69</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets the id for this tween. A tween id is a number that increases perpetually with each tween created. It is used inside <a href="group.html">Group</a> to keep track of tweens</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>returns the id for this tween.</p>
 					</li>
 				</ul>
 			</section>
@@ -2829,16 +2926,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L267">Tween.ts:267</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L382">Tween.ts:382</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the <a href="group.html">Group</a> for this tween.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>group: <a href="group.html" class="tsd-signature-type">Group</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the group for this tween. If undefined or null is given, the group will default to <a href="group.html#shared">Group.shared</a>.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2852,9 +2958,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L310">Tween.ts:310</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L471">Tween.ts:471</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the easing function to interpolate the starting values with the final values when the final value is an array of objects.
+								Use this to create bezier curves or interpolate colors.</p>
+							</div>
+							<p>You can use the functions inside the <a href="../globals.html#interpolation">Interpolation</a> object.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2862,6 +2975,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2875,10 +2989,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L69">Tween.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L93">Tween.ts:93</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A tween can only be paused if it was playing.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>returns true if this tween is paused.</p>
 					</li>
 				</ul>
 			</section>
@@ -2892,10 +3012,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L65">Tween.ts:65</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L85">Tween.ts:85</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A tween is playing when it has been started but hasn&#39;t ended yet. This has nothing to do with pausing. For that see <a href="tween.html#ispaused">Tween.isPaused</a>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>returns true if this tween is playing.</p>
 					</li>
 				</ul>
 			</section>
@@ -2903,30 +3029,38 @@ img {
 				<a name="oncomplete" class="tsd-anchor"></a>
 				<h3>on<wbr>Complete</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Complete<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Complete<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L340">Tween.ts:340</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L527">Tween.ts:527</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the onComplete callback</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the function to call on complete. It will recieve the target object as a parameter.</p>
+								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>object: <span class="tsd-signature-type">T</span></h5>
+														<h5>object: <span class="tsd-signature-type">Target</span></h5>
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2937,6 +3071,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2944,30 +3079,38 @@ img {
 				<a name="onrepeat" class="tsd-anchor"></a>
 				<h3>on<wbr>Repeat</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Repeat<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Repeat<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L334">Tween.ts:334</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L516">Tween.ts:516</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the onRepeat callback</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the function to call on repeat. It will recieve the target object as a parameter.</p>
+								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>object: <span class="tsd-signature-type">T</span></h5>
+														<h5>object: <span class="tsd-signature-type">Target</span></h5>
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2978,6 +3121,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -2985,30 +3129,38 @@ img {
 				<a name="onstart" class="tsd-anchor"></a>
 				<h3>on<wbr>Start</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Start<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Start<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L322">Tween.ts:322</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L494">Tween.ts:494</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the onStart callback</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the function to call on start. It will recieve the target object as a parameter.</p>
+								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>object: <span class="tsd-signature-type">T</span></h5>
+														<h5>object: <span class="tsd-signature-type">Target</span></h5>
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -3019,6 +3171,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3026,30 +3179,38 @@ img {
 				<a name="onstop" class="tsd-anchor"></a>
 				<h3>on<wbr>Stop</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Stop<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Stop<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L346">Tween.ts:346</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L538">Tween.ts:538</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the onStop callback</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the function to call on stop. It will recieve the target object as a parameter.</p>
+								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>object: <span class="tsd-signature-type">T</span></h5>
+														<h5>object: <span class="tsd-signature-type">Target</span></h5>
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -3060,6 +3221,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3067,30 +3229,38 @@ img {
 				<a name="onupdate" class="tsd-anchor"></a>
 				<h3>on<wbr>Update</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Update<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Update<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L328">Tween.ts:328</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L505">Tween.ts:505</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the onStart callback</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the function to call on start. It will recieve the target object as a parameter and a number between 0 and 1 determining the progress of the tween.</p>
+								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-signature">
 										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Target</span>, elapsed<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>object: <span class="tsd-signature-type">T</span></h5>
+														<h5>object: <span class="tsd-signature-type">Target</span></h5>
 													</li>
 													<li>
 														<h5>elapsed: <span class="tsd-signature-type">number</span></h5>
@@ -3104,6 +3274,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3117,10 +3288,17 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L235">Tween.ts:235</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L337">Tween.ts:337</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Pauses this tween. Does nothing is if the tween was already paused or wasn&#39;t playing.
+								Paused tweens ignore all update calls.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3134,16 +3312,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L285">Tween.ts:285</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L419">Tween.ts:419</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the number of times this tween will loop</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> times: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = Infinity</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the number of loops. For endless loops use <code>Infinity</code></p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3157,16 +3344,62 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L292">Tween.ts:292</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L433">Tween.ts:433</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the repeat delay for this tween.</p>
+							</div>
+							<p>This will only be applied at the start of every repeat. For delaying only the start, see <a href="tween.html#delay">Tween.delay</a></p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>amount: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the repeat delay for this tween.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="restart" class="tsd-anchor"></a>
+				<h3>restart</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">restart<span class="tsd-signature-symbol">(</span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L233">Tween.ts:233</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>experimental</dt>
+								<dd><p>Forces a tween to restart.
+									Starting values for the animation will be stored at this moment.</p>
+									<p><strong>Starting values will be cleared!. This function will erase all values created from <a href="tween.html#from">Tween.from</a> and/or <a href="tween.html#start">Tween.start</a></strong></p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>if given it will be used as the delay in <strong>miliseconds</strong>.</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3180,10 +3413,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L247">Tween.ts:247</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L353">Tween.ts:353</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Resumes this tween. Does nothing if the tween wasn&#39;t paused nor running.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3197,16 +3436,29 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L115">Tween.ts:115</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L184">Tween.ts:184</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Tweens won&#39;t start by themselves when created. Call this to start the tween.
+								Starting values for the animation will be stored at this moment.</p>
+							</div>
+							<p><strong>Starting values can&#39;t be overwritten. This function can&#39;t overwrite the starting values set by <a href="tween.html#from">Tween.from</a></strong></p>
+							<p>You can call this method on a finished tween to restart it without changing the starting values.
+							To restart a tween and reset the starting values use {@link Tween.restart()}</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>if given it will be used as the delay in <strong>miliseconds</strong>.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3220,10 +3472,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L206">Tween.ts:206</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L297">Tween.ts:297</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Stops this tween</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3237,10 +3495,16 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L259">Tween.ts:259</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L369">Tween.ts:369</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Stops tweens chained to this tween. To chain a tween see <a href="tween.html#chain">Tween.chain</a>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3254,16 +3518,28 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L279">Tween.ts:279</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L408">Tween.ts:408</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>experimental</dt>
+								<dd><p>Sets the timescale for this tween.
+									The deltaTime inside the update will be multiplied by this value allowing to speed up or slow down the flow of time.</p>
+								</dd>
+							</dl>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>multiplier: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the timescale value for this tween.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>
@@ -3271,31 +3547,47 @@ img {
 				<a name="to" class="tsd-anchor"></a>
 				<h3>to</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<li class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					<li class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, duration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L79">Tween.ts:79</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L124">Tween.ts:124</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Set the final values for the target object&#39;s properties by copy.
+									This will try to create a deep copy of the <code>properties</code> parameter.
+								If you want the tween to keep a reference to the final values use <a href="tween.html#dynamicto">Tween.dynamicTo</a>.</p>
+							</div>
+							<p>If an array value is provided for a value that originally wasn&#39;t an array, it will be interpreted as an interpolable curve and the values inside the array will be interpolated using the function provided in <a href="tween.html#interpolation">Tween.interpolation</a></p>
+							<p>If a string value that starts with either <code>+</code> or <code>-</code>is provided it will be taken as a <em>relative value</em> to the start value.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>properties: <span class="tsd-signature-type">RecursivePartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Target</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>final values for the target object.</p>
+								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> duration: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>if given it will be used as the duration in <strong>miliseconds</strong>. if not, a call to <a href="tween.html#duration">Tween.duration</a> will be needed.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L80">Tween.ts:80</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L125">Tween.ts:125</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3321,16 +3613,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L352">Tween.ts:352</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L549">Tween.ts:549</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates this tween</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>deltaTime: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the amount of time that passed since last update in <strong>miliseconds</strong></p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>returns true if the tween hasn&#39;t finished yet.</p>
 					</li>
 				</ul>
 			</section>
@@ -3344,16 +3645,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Tween.ts#L298">Tween.ts:298</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Tween.ts#L444">Tween.ts:444</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets if this tween should yoyo (reflect) itself when repeating.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> yoyo: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>the yoyo value for this tween.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						<p>returns this tween for daisy chaining methods.</p>
 					</li>
 				</ul>
 			</section>

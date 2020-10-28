@@ -2369,15 +2369,9 @@ img {
 			<a href="group.html" class="tsd-kind-icon">Group</a>
 			<ul>
 				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="group.html#_tweens" class="tsd-kind-icon">_tweens</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="group.html#_tweensaddedduringupdate" class="tsd-kind-icon">_tweens<wbr>Added<wbr>During<wbr>Update</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
 					<a href="group.html#now" class="tsd-kind-icon">now</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
 					<a href="group.html#shared" class="tsd-kind-icon">shared</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -2385,9 +2379,6 @@ img {
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="group.html#getall" class="tsd-kind-icon">get<wbr>All</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="group.html#getelapsedtime" class="tsd-kind-icon">get<wbr>Elapsed<wbr>Time</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="group.html#remove" class="tsd-kind-icon">remove</a>
@@ -2422,10 +2413,9 @@ img {
 		<section class="tsd-panel tsd-comment">
 			<div class="tsd-comment tsd-typography">
 				<div class="lead">
-					<p>Controlling groups of tweens</p>
+					<p>A group is a class that allows you to manage many tweens from one place.</p>
 				</div>
-				<p>Using the TWEEN singleton to manage your tweens can cause issues in large apps with many components.
-				In these cases, you may want to create your own smaller groups of tween</p>
+				<p>A tween will ALWAYS belong to a group. If no group is assigned it will default to the static shared group: <code>Group.shared</code>.</p>
 			</div>
 		</section>
 		<section class="tsd-panel tsd-hierarchy">
@@ -2443,10 +2433,13 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="group.html#_tweens" class="tsd-kind-icon">_tweens</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="group.html#_tweensaddedduringupdate" class="tsd-kind-icon">_tweens<wbr>Added<wbr>During<wbr>Update</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="group.html#now" class="tsd-kind-icon">now</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="group.html#shared" class="tsd-kind-icon">shared</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Accessors</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="group.html#shared" class="tsd-kind-icon">shared</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -2454,7 +2447,6 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#add" class="tsd-kind-icon">add</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#getall" class="tsd-kind-icon">get<wbr>All</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#getelapsedtime" class="tsd-kind-icon">get<wbr>Elapsed<wbr>Time</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#remove" class="tsd-kind-icon">remove</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#removeall" class="tsd-kind-icon">remove<wbr>All</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#update" class="tsd-kind-icon">update</a></li>
@@ -2466,50 +2458,20 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="_tweens" class="tsd-anchor"></a>
-				<h3>_tweens</h3>
-				<div class="tsd-signature tsd-kind-icon">_tweens<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L11">Group.ts:11</a></li>
-					</ul>
-				</aside>
-				<div class="tsd-type-declaration">
-					<h4>Type declaration</h4>
-					<ul class="tsd-parameters">
-						<li class="tsd-parameter-index-signature">
-							<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
-						</li>
-					</ul>
-				</div>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="_tweensaddedduringupdate" class="tsd-anchor"></a>
-				<h3>_tweens<wbr>Added<wbr>During<wbr>Update</h3>
-				<div class="tsd-signature tsd-kind-icon">_tweens<wbr>Added<wbr>During<wbr>Update<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L15">Group.ts:15</a></li>
-					</ul>
-				</aside>
-				<div class="tsd-type-declaration">
-					<h4>Type declaration</h4>
-					<ul class="tsd-parameters">
-						<li class="tsd-parameter-index-signature">
-							<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
-						</li>
-					</ul>
-				</div>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="now" class="tsd-anchor"></a>
 				<h3>now</h3>
 				<div class="tsd-signature tsd-kind-icon">now<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = NOW</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L24">Group.ts:24</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L36">Group.ts:36</a></li>
 					</ul>
 				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Function used by the group to know what time is it.
+						Used to calculate the deltaTime in case you call update without the parameter.</p>
+					</div>
+				</div>
 				<div class="tsd-type-declaration">
 					<h4>Type declaration</h4>
 					<ul class="tsd-parameters">
@@ -2526,15 +2488,30 @@ img {
 					</ul>
 				</div>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Accessors</h2>
+			<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
 				<a name="shared" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> shared</h3>
-				<div class="tsd-signature tsd-kind-icon">shared<span class="tsd-signature-symbol">:</span> <a href="group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol"> = new Group()</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L18">Group.ts:18</a></li>
-					</ul>
-				</aside>
+				<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> shared<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="group.html" class="tsd-signature-type">Group</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L23">Group.ts:23</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A tween without an explicit group will default to this shared static one.</p>
+							</div>
+						</div>
+						<h4 class="tsd-returns-title">Returns <a href="group.html" class="tsd-signature-type">Group</a></h4>
+					</li>
+				</ul>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
@@ -2549,13 +2526,22 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L34">Group.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L63">Group.ts:63</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds a tween to this group.</p>
+							</div>
+							<p><em>note: this will not modify the group reference inside the tween object</em></p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>tween: <a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Tween to add.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2572,33 +2558,17 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L26">Group.ts:26</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="getelapsedtime" class="tsd-anchor"></a>
-				<h3>get<wbr>Elapsed<wbr>Time</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">get<wbr>Elapsed<wbr>Time<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L48">Group.ts:48</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L44">Group.ts:44</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Gets elapsed time</p>
+								<p>Returns all the tweens in this group.</p>
 							</div>
+							<p><em>note: only <strong>running</strong> tweens are in a group.</em></p>
 						</div>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>elapsed time</p>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>all the running tweens.</p>
 					</li>
 				</ul>
 			</section>
@@ -2612,13 +2582,21 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L39">Group.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L74">Group.ts:74</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Removes a tween from this group.</p>
+							</div>
+							<p><em>note: this will not modify the group reference inside the tween object</em></p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>tween: <a href="tween.html" class="tsd-signature-type">Tween</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -2635,9 +2613,15 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L30">Group.ts:30</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L53">Group.ts:53</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Removes all the tweens in this group.</p>
+							</div>
+							<p><em>note: this will not modify the group reference inside the tween object</em></p>
+						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 					</li>
 				</ul>
@@ -2652,19 +2636,37 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/cd256c3/src/Group.ts#L52">Group.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/ba266b2/src/Group.ts#L93">Group.ts:93</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates all the tweens in this group.</p>
+							</div>
+							<p>If a tween is stopped, paused, finished or non started it will be removed from the group.</p>
+							<p> Tweens are updated in &quot;batches&quot;. If you add a new tween during an
+								update, then the new tween will be updated in the next batch.
+								If you remove a tween during an update, it may or may not be updated.
+								However, if the removed tween was added during the current batch,
+							then it will not be updated.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> deltaTime: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Amount of <strong>miliseconds</strong> that have passed since last excecution. If not provided it will be calculated using the <a href="group.html#now">Group.now</a> function</p>
+								</div>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> preserve: <span class="tsd-signature-type">boolean</span></h5>
+								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> preserve: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Prevent the removal of stopped, paused, finished or non started tweens.</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>returns true if the group is not empty.</p>
 					</li>
 				</ul>
 			</section>

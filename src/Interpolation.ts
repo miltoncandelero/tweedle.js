@@ -61,7 +61,45 @@ export const Interpolation = {
 		return fn(v[i ? i - 1 : 0], v[i], v[m < i + 1 ? m : i + 1], v[m < i + 2 ? m : i + 2], f - i);
 	},
 
+	Color(v: number[], k: number): number {
+		const m = v.length - 1;
+		const f = m * k;
+		const i = Math.floor(f);
+		const fn = Interpolation.Utils.Color;
+
+		if (k < 0) {
+			return fn(v[0], v[1], f);
+		}
+
+		if (k > 1) {
+			return fn(v[m], v[m - 1], m - f);
+		}
+
+		return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
+	},
+
 	Utils: {
+		Color(color1: number, color2: number, t: number) {
+			// Experimental
+
+			// this gets named ARGB but it is actually meaningless. It will work with RGBA just the same.
+			const a1 = (color1 >> 24) & 0xff;
+			const r1 = (color1 >> 16) & 0xff;
+			const g1 = (color1 >> 8) & 0xff;
+			const b1 = color1 & 0xff;
+
+			const a2 = (color2 >> 24) & 0xff;
+			const r2 = (color2 >> 16) & 0xff;
+			const g2 = (color2 >> 8) & 0xff;
+			const b2 = color2 & 0xff;
+
+			const a3 = Interpolation.Utils.Linear(a1, a2, t);
+			const r3 = Interpolation.Utils.Linear(r1, r2, t);
+			const g3 = Interpolation.Utils.Linear(g1, g2, t);
+			const b3 = Interpolation.Utils.Linear(b1, b2, t);
+
+			return (a3 << 24) | (r3 << 16) | (g3 << 8) | b3;
+		},
 		Linear(p0: number, p1: number, t: number): number {
 			return (p1 - p0) * t + p0;
 		},
