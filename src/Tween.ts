@@ -7,14 +7,13 @@
  * Thank you all, you're awesome!
  */
 
-import type { EasingFunction } from "./Easing";
-import type { InterpolationFunction } from "./Interpolation";
+import { Easing, EasingFunction } from "./Easing";
+import { Interpolation, InterpolationFunction } from "./Interpolation";
 import { Group } from "./Group";
-import TWEEN from "./Index";
+import { Sequence } from "./Sequence";
 
 export class Tween<T> {
 	private _isPaused = false;
-	private _pauseStart = 0;
 	private _valuesStart: any = {};
 	private _valuesEnd: any = {};
 	private _valuesStartRepeat: any = {};
@@ -28,8 +27,9 @@ export class Tween<T> {
 	private _delayTime = 0;
 	private _startTime = 0;
 	private _elapsedTime = 0;
-	private _easingFunction: EasingFunction = TWEEN.Easing.Linear.None;
-	private _interpolationFunction: InterpolationFunction = TWEEN.Interpolation.Linear;
+	private _timeScale = 1;
+	private _easingFunction: EasingFunction = Easing.Linear.None;
+	private _interpolationFunction: InterpolationFunction = Interpolation.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
 	private _onStartCallback?: (object: T) => void;
 	private _onStartCallbackFired = false;
@@ -37,13 +37,16 @@ export class Tween<T> {
 	private _onRepeatCallback?: (object: T) => void;
 	private _onCompleteCallback?: (object: T) => void;
 	private _onStopCallback?: (object: T) => void;
-	private _id = TWEEN.nextId();
+	private _id = Sequence.nextId();
 	private _isChainStopped = false;
 	private _object: T;
 	private _group: Group;
 
-	constructor(object: T, group: Group = Group.shared) {
+	constructor(object: T, group?: Group) {
 		this._object = object;
+		if (group == undefined) {
+			group = Group.shared;
+		}
 		this._group = group;
 	}
 
@@ -229,30 +232,24 @@ export class Tween<T> {
 		return this;
 	}
 
-	public pause(time: number): this {
+	public pause(): this {
 		if (this._isPaused || !this._isPlaying) {
 			return this;
 		}
 
 		this._isPaused = true;
 
-		this._pauseStart = time === undefined ? TWEEN.now() : time;
-
 		this._group.remove(this);
 
 		return this;
 	}
 
-	public resume(time: number): this {
+	public resume(): this {
 		if (!this._isPaused || !this._isPlaying) {
 			return this;
 		}
 
 		this._isPaused = false;
-
-		this._startTime += (time === undefined ? TWEEN.now() : time) - this._pauseStart;
-
-		this._pauseStart = 0;
 
 		this._group.add(this);
 
@@ -275,6 +272,12 @@ export class Tween<T> {
 
 	public delay(amount: number): this {
 		this._delayTime = amount;
+
+		return this;
+	}
+
+	public timescale(multiplier: number): this {
+		this._timeScale = multiplier;
 
 		return this;
 	}
@@ -361,6 +364,12 @@ export class Tween<T> {
 	 * @returns true if update
 	 */
 	public internalUpdate(deltaTime: number): boolean {
+		if (this._isPaused) {
+			return false;
+		}
+
+		deltaTime *= this._timeScale;
+
 		let elapsed;
 
 		this._elapsedTime += deltaTime;

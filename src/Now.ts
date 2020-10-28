@@ -1,4 +1,4 @@
-let NOW: () => number;
+export let NOW: () => number;
 
 // Include a performance.now polyfill.
 // In node.js, use process.hrtime.
@@ -29,5 +29,3 @@ else {
 		return new Date().getTime();
 	};
 }
-
-export default NOW;

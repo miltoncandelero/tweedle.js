@@ -3,7 +3,7 @@ export type EasingFunction = (amount: number) => number;
 /**
  * The Ease class provides a collection of easing functions for use with tween.js.
  */
-const Easing = {
+export const Easing = {
 	Linear: {
 		None(amount: number): number {
 			return amount;
@@ -204,5 +204,3 @@ const Easing = {
 		},
 	},
 };
-
-export default Easing;

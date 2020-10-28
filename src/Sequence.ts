@@ -1,10 +1,10 @@
 /**
  * Utils
  */
-export default class Sequence {
+export class Sequence {
 	private static _nextId = 0;
 
-	static nextId(): number {
+	public static nextId(): number {
 		return Sequence._nextId++;
 	}
 }

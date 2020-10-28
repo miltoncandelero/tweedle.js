@@ -6,7 +6,7 @@ export type InterpolationFunction = (v: number[], k: number) => number;
 /**
  *
  */
-const Interpolation = {
+export const Interpolation = {
 	Linear(v: number[], k: number): number {
 		const m = v.length - 1;
 		const f = m * k;
@@ -100,5 +100,3 @@ const Interpolation = {
 		},
 	},
 };
-
-export default Interpolation;

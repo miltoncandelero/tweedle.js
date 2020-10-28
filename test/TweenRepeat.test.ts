@@ -1,6 +1,6 @@
-import Easing from "../src/Easing";
+import { Easing } from "../src/Easing";
 import { Group } from "../src/Group";
-import Tween from "../src/Tween";
+import { Tween } from "../src/Tween";
 
 test("Tween with complex properties with yoyo repeat", () => {
 	const o = { x: 0.0, y: 100, some: { value: 0.0, style: { opacity: 1.0 }, unused: 100 } };

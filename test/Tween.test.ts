@@ -1,6 +1,6 @@
-import Easing from "../src/Easing";
+import { Easing } from "../src/Easing";
 import { Group } from "../src/Group";
-import Interpolation from "../src/Interpolation";
+import { Interpolation } from "../src/Interpolation";
 import { Tween } from "../src/Tween";
 
 test("Tween returns itself for chaining", () => {

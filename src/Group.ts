@@ -1,4 +1,4 @@
-import NOW from "./Now";
+import { NOW } from "./Now";
 import type { Tween } from "./Tween";
 
 /**

@@ -1,5 +1,5 @@
 import { Group } from "../src/Group";
-import Tween from "../src/Tween";
+import { Tween } from "../src/Tween";
 
 test("Tween calls onComplete when finishes", () => {
 	const g = new Group();
