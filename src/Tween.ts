@@ -23,6 +23,7 @@ export class Tween<Target> {
 	private _repeatDelayTime?: number;
 	private _yoyo = false;
 	private _isPlaying = false;
+	private _wasStartCalled = false;
 	private _reversed = false;
 	private _delayTime = 0;
 	private _startTime = 0;
@@ -105,6 +106,9 @@ export class Tween<Target> {
 	public from(properties: RecursivePartial<Target>): this;
 	public from(properties: any): this;
 	public from(properties: any): this {
+		if (this._wasStartCalled) {
+			console.warn("Tween was started before!. Calling from() after start() does nothing.");
+		}
 		this._setupProperties(properties, this._valuesStart, properties, this._valuesStartRepeat);
 		return this;
 	}
@@ -204,6 +208,8 @@ export class Tween<Target> {
 			this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
 		}
 
+		this._wasStartCalled = true;
+
 		this._isPlaying = true;
 
 		this._isPaused = false;
@@ -225,18 +231,32 @@ export class Tween<Target> {
 	 * @experimental
 	 * Forces a tween to restart.
 	 * Starting values for the animation will be stored at this moment.
+	 * This literally calls reset and then start.
 	 *
 	 * **Starting values will be cleared!. This function will erase all values created from {@link Tween.from} and/or {@link Tween.start}**
 	 * @param delay - if given it will be used as the delay in **miliseconds**.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
 	public restart(delay?: number): this {
+		this.reset();
+		return this.start(delay);
+	}
+
+	/**
+	 * @experimental
+	 * Clears the starting and loop starting values.
+	 *
+	 * **Starting values will be cleared!. This function will erase all values created from {@link Tween.from} and/or {@link Tween.start}**
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public reset(): this {
 		if (this._isPlaying) {
 			this.stop();
 		}
+		this._wasStartCalled = false;
 		this._valuesStart = {};
 		this._valuesStartRepeat = {};
-		return this.start(delay);
+		return this;
 	}
 
 	private _setupProperties(_object: any, _valuesStart: any, _valuesEnd: any, _valuesStartRepeat: any): void {
