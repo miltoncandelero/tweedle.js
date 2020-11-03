@@ -66,38 +66,34 @@ export const Interpolation = {
 			const m = v.length - 1;
 			const f = m * k;
 			const i = Math.floor(f);
-			const split = Interpolation.Utils.RGBsplit;
-			const interp = Interpolation.Utils.RGBLinear;
-			const join = Interpolation.Utils.RGBJoin;
+			const fn = Interpolation.Utils.RGBLinear;
 
 			if (k < 0) {
-				return join(interp(split(v[0]), split(v[1]), f));
+				return fn(v[0], v[1], f);
 			}
 
 			if (k > 1) {
-				return join(interp(split(v[m]), split(v[m - 1]), m - f));
+				return fn(v[m], v[m - 1], m - f);
 			}
 
-			return join(interp(split(v[i]), split(v[i + 1 > m ? m : i + 1]), f - i));
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
 		},
 
 		HSV(v: number[], k: number): number {
 			const m = v.length - 1;
 			const f = m * k;
 			const i = Math.floor(f);
-			const split = Interpolation.Utils.HSVsplit;
-			const interp = Interpolation.Utils.HSVLinear;
-			const join = Interpolation.Utils.HSVJoin;
+			const fn = Interpolation.Utils.HSVLinear;
 
 			if (k < 0) {
-				return join(interp(split(v[0]), split(v[1]), f));
+				return fn(v[0], v[1], f);
 			}
 
 			if (k > 1) {
-				return join(interp(split(v[m]), split(v[m - 1]), m - f));
+				return fn(v[m], v[m - 1], m - f);
 			}
 
-			return join(interp(split(v[i]), split(v[i + 1 > m ? m : i + 1]), f - i));
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
 		},
 	},
 
@@ -146,9 +142,6 @@ export const Interpolation = {
 
 			return { a, h, s, v };
 		},
-		RGBJoin(color: ARGB): number {
-			return (color.a << 24) | (color.r << 16) | (color.g << 8) | color.b;
-		},
 		HSVJoin(color: AHSV): number {
 			let r, g, b;
 
@@ -181,21 +174,23 @@ export const Interpolation = {
 			return (color.a << 24) | (r << 16) | (g << 8) | b;
 		},
 
-		RGBLinear(color1: ARGB, color2: ARGB, t: number): ARGB {
-			// Experimental
-
-			const a = Interpolation.Utils.Linear(color1.a, color2.a, t);
-			const r = Interpolation.Utils.Linear(color1.r, color2.r, t);
-			const g = Interpolation.Utils.Linear(color1.g, color2.g, t);
-			const b = Interpolation.Utils.Linear(color1.b, color2.b, t);
-			return { a, r, g, b };
+		RGBLinear(color1: number, color2: number, t: number): number {
+			const argb1 = Interpolation.Utils.RGBsplit(color1);
+			const argb2 = Interpolation.Utils.RGBsplit(color2);
+			const a = Interpolation.Utils.Linear(argb1.a, argb2.a, t);
+			const r = Interpolation.Utils.Linear(argb1.r, argb2.r, t);
+			const g = Interpolation.Utils.Linear(argb1.g, argb2.g, t);
+			const b = Interpolation.Utils.Linear(argb1.b, argb2.b, t);
+			return (a << 24) | (r << 16) | (g << 8) | b;
 		},
-		HSVLinear(color1: AHSV, color2: AHSV, t: number): AHSV {
-			const h = Interpolation.Utils.Linear(color1.h, color2.h, t);
-			const s = Interpolation.Utils.Linear(color1.s, color2.s, t);
-			const v = Interpolation.Utils.Linear(color1.v, color2.v, t);
-			const a = Interpolation.Utils.Linear(color1.a, color2.a, t); // alpha can't be done with hsv
-			return { a, h, s, v };
+		HSVLinear(color1: number, color2: number, t: number): number {
+			const ahsv1 = Interpolation.Utils.HSVsplit(color1);
+			const ahsv2 = Interpolation.Utils.HSVsplit(color2);
+			const h = Interpolation.Utils.Linear(ahsv1.h, ahsv2.h, t);
+			const s = Interpolation.Utils.Linear(ahsv1.s, ahsv2.s, t);
+			const v = Interpolation.Utils.Linear(ahsv1.v, ahsv2.v, t);
+			const a = Interpolation.Utils.Linear(ahsv1.a, ahsv2.a, t); // alpha can't be done with hsv
+			return Interpolation.Utils.HSVJoin({ a, h, s, v });
 		},
 
 		Linear(p0: number, p1: number, t: number): number {
