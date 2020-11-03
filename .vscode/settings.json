@@ -2,7 +2,8 @@
     "files.exclude": {
         "**/dist": true,
         "**/node_modules": true,
-        "**/types": true
+        "**/types": true,
+        "**/docs": true
     },
     "files.eol": "\n",
     "[typescript]": {
