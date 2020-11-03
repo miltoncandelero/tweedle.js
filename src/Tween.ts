@@ -23,7 +23,6 @@ export class Tween<Target> {
 	private _repeatDelayTime?: number;
 	private _yoyo = false;
 	private _isPlaying = false;
-	private _wasStartCalled = false;
 	private _reversed = false;
 	private _delayTime = 0;
 	private _startTime = 0;
@@ -106,10 +105,7 @@ export class Tween<Target> {
 	public from(properties: RecursivePartial<Target>): this;
 	public from(properties: any): this;
 	public from(properties: any): this {
-		if (this._wasStartCalled) {
-			console.warn("Tween was started before!. Calling from() after start() does nothing.");
-		}
-		this._setupProperties(properties, this._valuesStart, properties, this._valuesStartRepeat);
+		this._setupProperties(properties, this._valuesStart, properties, this._valuesStartRepeat, true);
 		return this;
 	}
 
@@ -208,8 +204,6 @@ export class Tween<Target> {
 			this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
 		}
 
-		this._wasStartCalled = true;
-
 		this._isPlaying = true;
 
 		this._isPaused = false;
@@ -222,7 +216,7 @@ export class Tween<Target> {
 
 		this._elapsedTime = 0;
 
-		this._setupProperties(this._object, this._valuesStart, this._valuesEnd, this._valuesStartRepeat);
+		this._setupProperties(this._object, this._valuesStart, this._valuesEnd, this._valuesStartRepeat, false);
 
 		return this;
 	}
@@ -253,24 +247,24 @@ export class Tween<Target> {
 		if (this._isPlaying) {
 			this.stop();
 		}
-		this._wasStartCalled = false;
 		this._valuesStart = {};
 		this._valuesStartRepeat = {};
 		return this;
 	}
 
-	private _setupProperties(_object: any, _valuesStart: any, _valuesEnd: any, _valuesStartRepeat: any): void {
+	private _setupProperties(_object: any, _valuesStart: any, _valuesEnd: any, _valuesStartRepeat: any, overwrite: boolean): void {
 		for (const property in _valuesEnd) {
 			const startValue = _object[property];
 			const startValueIsArray = Array.isArray(startValue);
 			const startValueIsNumber = !Number.isNaN(Number(startValue));
 			const propType = startValueIsArray ? "array" : typeof startValue;
-			const startValueIsObject = propType === "object";
+			const startValueIsObject = propType == "object";
+			const endValueIsObject = typeof _valuesEnd[property] == "object";
 			const isInterpolationList = !startValueIsArray && Array.isArray(_valuesEnd[property]);
 
 			// If `to()` specifies a property that doesn't exist in the source object,
 			// we should not set that property in the object
-			if (propType === "undefined" || propType === "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber && !startValueIsObject)) {
+			if (propType == "undefined" || propType == "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber && !startValueIsObject)) {
 				continue;
 			}
 
@@ -278,7 +272,7 @@ export class Tween<Target> {
 			if (isInterpolationList) {
 				let endValues: Array<number | string> = _valuesEnd[property];
 
-				if (endValues.length === 0) {
+				if (endValues.length == 0) {
 					continue;
 				}
 
@@ -290,21 +284,27 @@ export class Tween<Target> {
 			}
 
 			// handle the deepness of the values
-			if ((startValueIsObject || startValueIsArray) && startValue && !isInterpolationList) {
-				_valuesStart[property] = startValueIsArray ? [] : {};
-				_valuesStartRepeat[property] = startValueIsArray ? [] : {};
+			if ((startValueIsObject || startValueIsArray || endValueIsObject) && startValue && !isInterpolationList) {
+				if (typeof _valuesStart[property] == "undefined") {
+					_valuesStart[property] = startValueIsArray ? [] : {};
+				}
+				if (typeof _valuesStartRepeat[property] == "undefined") {
+					_valuesStartRepeat[property] = startValueIsArray ? [] : {};
+				}
 
-				this._setupProperties(startValue, _valuesStart[property], _valuesEnd[property], _valuesStartRepeat[property]);
+				this._setupProperties(startValue, _valuesStart[property], _valuesEnd[property], _valuesStartRepeat[property], overwrite);
 			} else {
 				// Save the starting value, but only once.
-				if (typeof _valuesStart[property] === "undefined") {
+				if (typeof _valuesStart[property] == "undefined" || overwrite) {
 					_valuesStart[property] = startValue;
 				}
 
-				if (isInterpolationList) {
-					_valuesStartRepeat[property] = _valuesEnd[property].slice().reverse();
-				} else {
-					_valuesStartRepeat[property] = _valuesStart[property] || 0;
+				if (typeof _valuesStartRepeat[property] == "undefined" || overwrite) {
+					if (isInterpolationList) {
+						_valuesStartRepeat[property] = _valuesEnd[property].slice().reverse();
+					} else {
+						_valuesStartRepeat[property] = _valuesStart[property] || 0;
+					}
 				}
 			}
 		}
@@ -600,7 +600,7 @@ export class Tween<Target> {
 			this.start();
 		}
 
-		if (this._onStartCallbackFired === false) {
+		if (this._onStartCallbackFired == false) {
 			if (this._onStartCallback) {
 				this._onStartCallback(this._object);
 			}
@@ -610,7 +610,7 @@ export class Tween<Target> {
 
 		elapsed = currentTime / this._duration;
 		// zero duration = instacomplete.
-		elapsed = this._duration === 0 ? 1 : elapsed;
+		elapsed = this._duration == 0 ? 1 : elapsed;
 		// otherwise, clamp the result
 		elapsed = Math.min(1, elapsed);
 		elapsed = Math.max(0, elapsed);
@@ -631,7 +631,7 @@ export class Tween<Target> {
 			this._onUpdateCallback(this._object, elapsed);
 		}
 
-		if (elapsed === 1) {
+		if (elapsed == 1) {
 			if (this._repeat > 0) {
 				// substract loops
 				if (isFinite(this._repeat)) {
@@ -703,7 +703,7 @@ export class Tween<Target> {
 	private _updateProperties(_object: any, _valuesStart: any, _valuesEnd: any, value: number): void {
 		for (const property in _valuesEnd) {
 			// Don't update properties that do not exist in the source object
-			if (_valuesStart[property] === undefined) {
+			if (_valuesStart[property] == undefined) {
 				continue;
 			}
 
@@ -715,19 +715,19 @@ export class Tween<Target> {
 
 			if (isInterpolationList) {
 				_object[property] = this._interpolationFunction(end as Array<number>, value);
-			} else if (typeof end === "object" && end) {
+			} else if (typeof end == "object" && end) {
 				this._updateProperties(_object[property], start, end, value);
 			} else {
 				// Parses relative end values with start as base (e.g.: +10, -3)
 				end = this._handleRelativeValue(start, end as number | string);
 
 				// Protect against non numeric properties.
-				if (typeof end === "number" && (typeof start === "number" || typeof start === "string")) {
+				if (typeof end == "number" && (typeof start == "number" || typeof start == "string")) {
 					// I am certain that start here won't anser NaN or it would have been filtrated on the setupProperties
 					_object[property] = Number(start) + (end - Number(start)) * value;
 
 					// if it was originally a string, we make it back to string. keep it tidy
-					if (typeof start === "string") {
+					if (typeof start == "string") {
 						_object[property] = String(_object[property]);
 					}
 				}
@@ -740,7 +740,7 @@ export class Tween<Target> {
 			return end;
 		}
 
-		if (end.charAt(0) === "+" || end.charAt(0) === "-") {
+		if (end.charAt(0) == "+" || end.charAt(0) == "-") {
 			return start + Number(end);
 		}
 
@@ -749,11 +749,11 @@ export class Tween<Target> {
 
 	private _swapEndStartRepeatValues(_valuesStartRepeat: any, _valuesEnd: any): void {
 		for (const property in _valuesStartRepeat) {
-			if (typeof _valuesStartRepeat[property] === "object") {
+			if (typeof _valuesStartRepeat[property] == "object") {
 				this._swapEndStartRepeatValues(_valuesStartRepeat[property], _valuesEnd[property]);
 			} else {
 				const tmp = _valuesStartRepeat[property];
-				if (typeof _valuesEnd[property] === "string") {
+				if (typeof _valuesEnd[property] == "string") {
 					_valuesStartRepeat[property] = Number(_valuesStartRepeat[property]) + Number(_valuesEnd[property]);
 				} else {
 					_valuesStartRepeat[property] = _valuesEnd[property];
@@ -766,10 +766,10 @@ export class Tween<Target> {
 
 	private _moveForwardStartRepeatValues(_valuesStartRepeat: any, _valuesEnd: any): void {
 		for (const property in _valuesStartRepeat) {
-			if (typeof _valuesEnd[property] === "object") {
+			if (typeof _valuesEnd[property] == "object") {
 				this._moveForwardStartRepeatValues(_valuesStartRepeat[property], _valuesEnd[property]);
 			} else {
-				if (typeof _valuesEnd[property] === "string") {
+				if (typeof _valuesEnd[property] == "string") {
 					_valuesStartRepeat[property] = Number(_valuesStartRepeat[property]) + Number(_valuesEnd[property]);
 				}
 			}

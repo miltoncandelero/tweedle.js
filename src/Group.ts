@@ -105,7 +105,7 @@ export class Group {
 
 		this._lastUpdateTime = this.now();
 
-		if (tweenIds.length === 0) {
+		if (tweenIds.length == 0) {
 			return false;
 		}
 
@@ -120,7 +120,7 @@ export class Group {
 			for (let i = 0; i < tweenIds.length; i++) {
 				const tween = this._tweens[tweenIds[i]];
 
-				if (tween && tween._internalUpdate(deltaTime) === false && !preserve) {
+				if (tween && tween._internalUpdate(deltaTime) == false && !preserve) {
 					delete this._tweens[tweenIds[i]];
 				}
 			}

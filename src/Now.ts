@@ -8,7 +8,7 @@ export let NOW: () => number;
 // In node.js, use process.hrtime.
 
 // @ts-ignore
-if (typeof self === "undefined" && typeof process !== "undefined" && process.hrtime) {
+if (typeof self == "undefined" && typeof process !== "undefined" && process.hrtime) {
 	NOW = function (): number {
 		// @ts-ignore
 		const time = process.hrtime();

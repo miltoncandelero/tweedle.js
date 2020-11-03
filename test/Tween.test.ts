@@ -164,11 +164,11 @@ test("Tween array properties", () => {
 });
 
 test("Tween with complex properties", () => {
-	const o = { x: 0.0, y: 100, some: { value: 0.0, style: { opacity: 1.0 }, unused: 100 } };
+	const o = { x: 0.0, y: 100, some: { value: 0.0, anotherValue: 0.0, style: { opacity: 1.0, anotherOpacity: 0.0 }, unused: 100 } };
 	const g = new Group();
 	const t = new Tween(o, g);
 
-	t.to({ x: 1.0, y: 200, some: { value: 1.0, style: { opacity: 0.5 } } }, 1000);
+	t.to({ x: 1.0, y: 200, some: { value: 1.0, anotherValue: 2.0, style: { opacity: 0.5, anotherOpacity: 0.5 } } }, 1000);
 
 	t.start();
 
@@ -179,21 +179,27 @@ test("Tween with complex properties", () => {
 	expect(o.x).toBe(0.4);
 	expect(o.y).toBe(140);
 	expect(o.some.style.opacity).toBe(0.8);
+	expect(o.some.style.anotherOpacity).toBe(0.2);
 	expect(o.some.value).toBe(0.4);
+	expect(o.some.anotherValue).toBe(0.8);
 
 	g.update(350);
 
 	expect(o.x).toBe(0.75);
 	expect(o.y).toBe(175);
 	expect(o.some.style.opacity).toBe(0.625);
+	expect(o.some.style.anotherOpacity).toBe(0.375);
 	expect(o.some.value).toBe(0.75);
+	expect(o.some.anotherValue).toBe(1.5);
 
 	g.update(250);
 
 	expect(o.x).toBe(1.0);
 	expect(o.y).toBe(200);
 	expect(o.some.style.opacity).toBe(0.5);
+	expect(o.some.style.anotherOpacity).toBe(0.5);
 	expect(o.some.value).toBe(1.0);
+	expect(o.some.anotherValue).toBe(2.0);
 
 	// make sure we didn't break any other prop
 	expect(o.some.unused).toBe(100);

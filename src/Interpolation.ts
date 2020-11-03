@@ -43,7 +43,7 @@ export const Interpolation = {
 		let i = Math.floor(f);
 		const fn = Interpolation.Utils.CatmullRom;
 
-		if (v[0] === v[m]) {
+		if (v[0] == v[m]) {
 			if (k < 0) {
 				i = Math.floor((f = m * (1 + k)));
 			}
