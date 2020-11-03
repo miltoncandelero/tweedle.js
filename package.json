@@ -1,6 +1,6 @@
 {
   "name": "tweedle.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tweedle.js is a fork of tween.js made to fit my needs.",
   "source": "src/index.ts",
   "main": "dist/tweedle.js",
