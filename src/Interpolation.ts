@@ -95,6 +95,22 @@ export const Interpolation = {
 
 			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
 		},
+		HCL(v: number[], k: number): number {
+			const m = v.length - 1;
+			const f = m * k;
+			const i = Math.floor(f);
+			const fn = Interpolation.Utils.HCLLinear;
+
+			if (k < 0) {
+				return fn(v[0], v[1], f);
+			}
+
+			if (k > 1) {
+				return fn(v[m], v[m - 1], m - f);
+			}
+
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
+		},
 	},
 
 	Utils: {
@@ -107,15 +123,12 @@ export const Interpolation = {
 			return { a, r, g, b };
 		},
 		HSVsplit(color: number): AHSV {
-			const a = (color >> 24) & 0xff;
-			let r = (color >> 16) & 0xff;
-			let g = (color >> 8) & 0xff;
-			let b = color & 0xff;
+			const rgb = Interpolation.Utils.RGBsplit(color);
 
-			(r /= 255), (g /= 255), (b /= 255);
+			(rgb.r /= 255), (rgb.g /= 255), (rgb.b /= 255);
 
-			const max = Math.max(r, g, b);
-			const min = Math.min(r, g, b);
+			const max = Math.max(rgb.r, rgb.g, rgb.b);
+			const min = Math.min(rgb.r, rgb.g, rgb.b);
 			let h;
 			const v = max;
 
@@ -126,21 +139,21 @@ export const Interpolation = {
 				h = 0; // achromatic
 			} else {
 				switch (max) {
-					case r:
-						h = (g - b) / d + (g < b ? 6 : 0);
+					case rgb.r:
+						h = (rgb.g - rgb.b) / d + (rgb.g < rgb.b ? 6 : 0);
 						break;
-					case g:
-						h = (b - r) / d + 2;
+					case rgb.g:
+						h = (rgb.b - rgb.r) / d + 2;
 						break;
-					case b:
-						h = (r - g) / d + 4;
+					case rgb.b:
+						h = (rgb.r - rgb.g) / d + 4;
 						break;
 				}
 
 				h /= 6;
 			}
 
-			return { a, h, s, v };
+			return { a: rgb.a, h, s, v };
 		},
 		HSVJoin(color: AHSV): number {
 			let r, g, b;
@@ -174,6 +187,85 @@ export const Interpolation = {
 			return (color.a << 24) | (r << 16) | (g << 8) | b;
 		},
 
+		HCLSplit(color: number): AHCL {
+			/* https://www.chilliant.com/rgb2hsv.html */
+			const HCLgamma = 3;
+			const HCLy0 = 100;
+			const HCLmaxL = 0.530454533953517; // == exp(HCLgamma / HCLy0) - 0.5
+
+			const RGB = Interpolation.Utils.RGBsplit(color);
+			const HCL: AHCL = { a: RGB.a, h: 0, c: 0, l: 0 };
+			let H = 0;
+			const U = Math.min(RGB.r, Math.min(RGB.g, RGB.b));
+			const V = Math.max(RGB.r, Math.max(RGB.g, RGB.b));
+			let Q = HCLgamma / HCLy0;
+			HCL.c = V - U;
+			if (HCL.c != 0) {
+				H = Math.atan2(RGB.g - RGB.b, RGB.r - RGB.g) / Math.PI;
+				Q *= U / V;
+			}
+			Q = Math.exp(Q);
+			HCL.h = (H / 2 - Math.min(H % 1, -H % 1) / 6) % 1;
+			HCL.c *= Q;
+			HCL.l = Interpolation.Utils.Linear(-U, V, Q) / (HCLmaxL * 2);
+			return HCL;
+		},
+
+		HCLJoin(HCL: AHCL): number {
+			/* https://www.chilliant.com/rgb2hsv.html */
+			const HCLgamma = 3;
+			const HCLy0 = 100;
+			const HCLmaxL = 0.530454533953517; // == exp(HCLgamma / HCLy0) - 0.5
+			const RGB: ARGB = { a: HCL.a, r: 0, g: 0, b: 0 };
+
+			if (HCL.l != 0) {
+				let H = HCL.h;
+				const C = HCL.c;
+				const L = HCL.l * HCLmaxL;
+				const Q = Math.exp((1 - C / (2 * L)) * (HCLgamma / HCLy0));
+				const U = (2 * L - C) / (2 * Q - 1);
+				const V = C / Q;
+				const A = (H + Math.min(((2 * H) % 1) / 4, ((-2 * H) % 1) / 8)) * Math.PI * 2;
+				let T;
+				H *= 6;
+				if (H <= 0.999) {
+					T = Math.tan(A);
+					RGB.r = 1;
+					RGB.g = T / (1 + T);
+				} else if (H <= 1.001) {
+					RGB.r = 1;
+					RGB.g = 1;
+				} else if (H <= 2) {
+					T = Math.tan(A);
+					RGB.r = (1 + T) / T;
+					RGB.g = 1;
+				} else if (H <= 3) {
+					T = Math.tan(A);
+					RGB.g = 1;
+					RGB.b = 1 + T;
+				} else if (H <= 3.999) {
+					T = Math.tan(A);
+					RGB.g = 1 / (1 + T);
+					RGB.b = 1;
+				} else if (H <= 4.001) {
+					RGB.g = 0;
+					RGB.b = 1;
+				} else if (H <= 5) {
+					T = Math.tan(A);
+					RGB.r = -1 / T;
+					RGB.b = 1;
+				} else {
+					T = Math.tan(A);
+					RGB.r = 1;
+					RGB.b = -T;
+				}
+				RGB.r = RGB.r * V + U;
+				RGB.g = RGB.g * V + U;
+				RGB.b = RGB.b * V + U;
+			}
+			return (RGB.a << 24) | (RGB.r << 16) | (RGB.g << 8) | RGB.b;
+		},
+
 		RGBLinear(color1: number, color2: number, t: number): number {
 			const argb1 = Interpolation.Utils.RGBsplit(color1);
 			const argb2 = Interpolation.Utils.RGBsplit(color2);
@@ -186,10 +278,39 @@ export const Interpolation = {
 		HSVLinear(color1: number, color2: number, t: number): number {
 			const ahsv1 = Interpolation.Utils.HSVsplit(color1);
 			const ahsv2 = Interpolation.Utils.HSVsplit(color2);
-			const h = Interpolation.Utils.Linear(ahsv1.h, ahsv2.h, t);
+			let h: number;
+			if (Math.abs(ahsv1.h - ahsv2.h) <= 0.5) {
+				h = Interpolation.Utils.Linear(ahsv1.h, ahsv2.h, t);
+			} else {
+				if (ahsv1.h < ahsv2.h) {
+					h = Interpolation.Utils.Linear(ahsv1.h + 1, ahsv2.h, t);
+				} else {
+					h = Interpolation.Utils.Linear(ahsv1.h, ahsv2.h + 1, t);
+				}
+				h = h % 1;
+			}
 			const s = Interpolation.Utils.Linear(ahsv1.s, ahsv2.s, t);
 			const v = Interpolation.Utils.Linear(ahsv1.v, ahsv2.v, t);
 			const a = Interpolation.Utils.Linear(ahsv1.a, ahsv2.a, t); // alpha can't be done with hsv
+			return Interpolation.Utils.HSVJoin({ a, h, s, v });
+		},
+		HCLLinear(color1: number, color2: number, t: number): number {
+			const ahcl1 = Interpolation.Utils.HCLSplit(color1);
+			const ahcl2 = Interpolation.Utils.HCLSplit(color2);
+			let h: number;
+			if (Math.abs(ahcl1.h - ahcl2.h) <= 0.5) {
+				h = Interpolation.Utils.Linear(ahcl1.h, ahcl2.h, t);
+			} else {
+				if (ahcl1.h < ahcl2.h) {
+					h = Interpolation.Utils.Linear(ahcl1.h + 1, ahcl2.h, t);
+				} else {
+					h = Interpolation.Utils.Linear(ahcl1.h, ahcl2.h + 1, t);
+				}
+				h = h % 1;
+			}
+			const s = Interpolation.Utils.Linear(ahcl1.c, ahcl2.c, t);
+			const v = Interpolation.Utils.Linear(ahcl1.l, ahcl2.l, t);
+			const a = Interpolation.Utils.Linear(ahcl1.a, ahcl2.a, t); // alpha can't be done with hsv
 			return Interpolation.Utils.HSVJoin({ a, h, s, v });
 		},
 
@@ -244,4 +365,11 @@ interface AHSV {
 	h: number;
 	s: number;
 	v: number;
+}
+
+interface AHCL {
+	a: number;
+	h: number;
+	c: number;
+	l: number;
 }
