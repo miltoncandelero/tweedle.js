@@ -7,7 +7,7 @@
   "files": [
     "dist"
   ],
-  "types": "dist/index.d.ts",
+  "types": "dist/tweedle.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/miltoncandelero/tweedle.js.git"
@@ -15,8 +15,13 @@
   "bugs": {
     "url": "https://github.com/miltoncandelero/tweedle.js/issues"
   },
-  "homepage": "https://github.com/miltoncandelero/tweedle.js",
-  "keywords": [],
+  "homepage": "https://miltoncandelero.github.io/tweedle.js/",
+  "keywords": [
+    "tween",
+    "videogames",
+    "typescript",
+    "animation"
+  ],
   "author": "Milton Candelero <miltoncandelero@gmail.com>",
   "license": "MIT",
   "dependencies": {},
@@ -43,7 +48,7 @@
     "build": "npm run clean && npm run bundle && npm run types",
     "clean": "rimraf ./dist && rimraf ./types",
     "bundle": "microbundle --name tweedle && microbundle --name TWEEDLE -f iife -o ./dist/tweedle.iife.js",
-    "types": "tsc ./src/index.ts --emitDeclarationOnly --stripInternal --target es5 -d --outDir ./types && dts-bundle --name tweedle.js --main ./types/index.d.ts --out ../dist/index.d.ts",
+    "types": "tsc ./src/index.ts --emitDeclarationOnly --stripInternal --target es5 -d --outDir ./types && dts-bundle --name tweedle.js --main ./types/index.d.ts --out ../dist/tweedle.d.ts",
     "prepublishOnly": "npm run build",
     "test": "jest",
     "doc": "rimraf ./docs && typedoc --mode library --out docs src/index.ts --excludeNotExported --excludePrivate --excludeProtected --stripInternal --theme minimal"
