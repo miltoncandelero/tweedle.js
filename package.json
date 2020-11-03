@@ -5,8 +5,7 @@
   "source": "src/index.ts",
   "main": "dist/tweedle.js",
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "types": "./types/index.d.ts",
   "repository": {
