@@ -1,6 +1,4 @@
 import { Easing } from "../src/Easing";
-// import { Group } from "../src/Group";
-// import { Interpolation } from "../src/Interpolation";
 import { Tween } from "../src/Tween";
 
 test("Tween from changes the start value", () => {
@@ -152,4 +150,15 @@ test("Tween from plays nice with yoyo repeat", () => {
 	expect(o.noFrom).toBe(0);
 	expect(o.complexFrom.yes).toBe(2);
 	expect(o.complexFrom.no).toBe(0);
+});
+
+test("Tween from throws when feeded a circular object", () => {
+	const a = { b: {} };
+	const b = { a: {} };
+	a.b = b;
+	b.a = a;
+	const t = new Tween({}).to({}, 100);
+
+	// throws when called with a circular reference
+	expect(() => t.from(a)).toThrow();
 });

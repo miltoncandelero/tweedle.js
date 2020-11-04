@@ -27,7 +27,7 @@ export class Tween<Target> {
 	private _delayTime = 0;
 	private _startTime = 0;
 	private _elapsedTime = 0;
-	private _timeScale = 1;
+	private _timescale = 1;
 	private _easingFunction: EasingFunction = Easing.Linear.None;
 	private _interpolationFunction: InterpolationFunction = Interpolation.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
@@ -79,6 +79,14 @@ export class Tween<Target> {
 	}
 
 	/**
+	 * Gets the timescale for this tween. The timescale is a factor by which each deltatime is multiplied, allowing to speed up or slow down the tween.
+	 * @returns returns the timescale for this tween.
+	 */
+	public getTimescale(): number {
+		return this._timescale;
+	}
+
+	/**
 	 * A tween is playing when it has been started but hasn't ended yet. This has nothing to do with pausing. For that see {@link Tween.isPaused}.
 	 * @returns returns true if this tween is playing.
 	 */
@@ -95,7 +103,6 @@ export class Tween<Target> {
 	}
 
 	/**
-	 * @experimental
 	 * Writes the starting values of the tween.
 	 *
 	 * **Starting values generated from {@link Tween.start} will be overwritten.**
@@ -105,6 +112,11 @@ export class Tween<Target> {
 	public from(properties: RecursivePartial<Target>): this;
 	public from(properties: any): this;
 	public from(properties: any): this {
+		try {
+			JSON.stringify(properties);
+		} catch (e) {
+			throw new Error("The object you provided to the from() method has a circular reference!");
+		}
 		this._setupProperties(properties, this._valuesStart, properties, this._valuesStartRepeat, true);
 		return this;
 	}
@@ -128,7 +140,7 @@ export class Tween<Target> {
 			this._valuesEnd = JSON.parse(JSON.stringify(properties));
 		} catch (e) {
 			// recursive object. this gonna crash!
-			console.warn("Your target object has a circular reference. It can't be cloned. Falling back to dynamic targeting");
+			console.warn("The object you provided to the to() method has a circular reference!. It can't be cloned. Falling back to dynamic targeting");
 			return this.dynamicTo(properties, duration);
 		}
 
@@ -419,14 +431,13 @@ export class Tween<Target> {
 	}
 
 	/**
-	 * @experimental
 	 * Sets the timescale for this tween.
 	 * The deltaTime inside the update will be multiplied by this value allowing to speed up or slow down the flow of time.
 	 * @param multiplier - the timescale value for this tween.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
 	public timescale(multiplier: number): this {
-		this._timeScale = multiplier;
+		this._timescale = multiplier;
 
 		return this;
 	}
@@ -582,7 +593,7 @@ export class Tween<Target> {
 			return false;
 		}
 
-		deltaTime *= this._timeScale;
+		deltaTime *= this._timescale;
 
 		let elapsed;
 
