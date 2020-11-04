@@ -21,12 +21,18 @@ module.exports = {
         "plugin:jest/style"
     ],
 
-    "rules": {
+    rules: {
         "spaced-comment": ["error", "always", { "block": { "balanced": true } }],
         "@typescript-eslint/no-unsafe-return": "off",
 
+        // I personally hate this rule but since this will be traspiled into javascript peasants, they need a way to know what stuff not to mess with.
+        "@typescript-eslint/naming-convention": [
+            "error",
+            { selector: "memberLike", modifiers: ["private"], format: ["camelCase"], leadingUnderscore: "require", trailingUnderscore: "forbid" },
+        ],
 
-        "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { constructors: 'off' } }], //soon...
+
+        "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { constructors: 'off' } }],
         "@typescript-eslint/explicit-function-return-type": ["error", { allowExpressions: true }],
 
         "no-implicit-coercion": "error",
