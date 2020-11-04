@@ -29,6 +29,7 @@ export class Tween<Target> {
 	private _elapsedTime = 0;
 	private _timescale = 1;
 	private _easingFunction: EasingFunction = Easing.Linear.None;
+	private _yoyoEasingFunction: EasingFunction = undefined;
 	private _interpolationFunction: InterpolationFunction = Interpolation.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
 	private _onStartCallback?: (object: Target) => void;
@@ -492,6 +493,20 @@ export class Tween<Target> {
 	}
 
 	/**
+	 * @experimental
+	 * Sets the easing function to interpolate the starting values with the final values on the way back due to a yoyo tween.
+	 *
+	 * You can use the functions inside the {@link Easing} object.
+	 * @param easingFunction - a function that takes a number between 0 and 1 and returns another number between 0 and 1
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public yoyoEasing(easingFunction: EasingFunction): this {
+		this._yoyoEasingFunction = easingFunction;
+
+		return this;
+	}
+
+	/**
 	 * Sets the easing function to interpolate the starting values with the final values when the final value is an array of objects.
 	 * Use this to create bezier curves or interpolate colors.
 	 *
@@ -632,7 +647,13 @@ export class Tween<Target> {
 		}
 		const loopsMade = Math.round(currentTime / this._duration); // if we overloop, how many loops did we eat?
 
-		const value = this._easingFunction(elapsed);
+		// check which easing to use...
+		let value: number;
+		if (this._reversed && this._yoyoEasingFunction) {
+			value = this._yoyoEasingFunction(elapsed);
+		} else {
+			value = this._easingFunction(elapsed);
+		}
 
 		// properties transformations
 		this._updateProperties(this._object, this._valuesStart, this._valuesEnd, value);
