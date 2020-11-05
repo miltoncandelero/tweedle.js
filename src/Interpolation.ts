@@ -51,6 +51,26 @@ export const Interpolation = {
 			return b;
 		},
 
+		QuadraticBezier(v: number[], k: number): number {
+			let b = 0;
+			const n = v.length - 1;
+			const pw = Math.pow;
+			const bn = Interpolation.Utils.Bernstein;
+
+			const f = n * k;
+			const i = Math.floor(f);
+			const t = (f - i) * 0.5 + (i % 2 == 0 ? 0.5 : 0);
+			const i1: number = i % 2 == 0 ? i : i + 1;
+			const i0: number = i1 - 1;
+			const i2: number = i1 + 1;
+
+			b += bn(2, 0) * pw(1 - t, 2 - 0) * pw(t, i) * v[i0];
+			b += bn(2, 1) * pw(1 - t, 2 - 1) * pw(t, i) * v[i1];
+			b += bn(2, 2) * pw(1 - t, 2 - 2) * pw(t, i) * v[i2];
+
+			return b;
+		},
+
 		/**
 		 * A Catmullrom spline is a curve where the original set of points is also used as control points.
 		 * Usually Catmullrom splines need two extra elements at the beginning and the end of the point set. This function contemplates that and doesn't need them.
