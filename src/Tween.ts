@@ -590,20 +590,18 @@ export class Tween<Target> {
 	/**
 	 * Updates this tween
 	 * @param deltaTime - the amount of time that passed since last update in **miliseconds**
+	 * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens from their group.
 	 * @returns returns true if the tween hasn't finished yet.
 	 */
-	public update(deltaTime: number): boolean {
+	public update(deltaTime: number, preserve: boolean = false): boolean {
 		const retval = this._internalUpdate(deltaTime);
-		if (!retval) {
+		if (!retval && !preserve) {
 			this._group.remove(this);
 		}
 		return retval;
 	}
 
-	/**
-	 * @internal
-	 */
-	public _internalUpdate(deltaTime: number): boolean {
+	private _internalUpdate(deltaTime: number): boolean {
 		if (this._isPaused) {
 			return false;
 		}

@@ -120,7 +120,8 @@ export class Group {
 			for (let i = 0; i < tweenIds.length; i++) {
 				const tween = this._tweens[tweenIds[i]];
 
-				if (tween && tween._internalUpdate(deltaTime) == false && !preserve) {
+				// groups call the preserve with true because they like to delete themselves in a different way.
+				if (tween && tween.update(deltaTime, true) == false && !preserve) {
 					delete this._tweens[tweenIds[i]];
 				}
 			}
