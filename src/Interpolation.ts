@@ -1,67 +1,139 @@
 /**
- *
+ * An function that takes creates a value by interpolating the elements of the array given.
  */
 export type InterpolationFunction = (v: number[], k: number) => number;
 
 /**
- *
+ * Object containing common interpolation functions.
+ * These functions can be passed in the {@link Tween.interpolation} argument and **will only affect fields where you gave an array as target value**
  */
 export const Interpolation = {
-	Linear(v: number[], k: number): number {
-		const m = v.length - 1;
-		const f = m * k;
-		const i = Math.floor(f);
-		const fn = Interpolation.Utils.Linear;
+	/**
+	 * Geometric interpolation functions. Good for interpolating positions in space.
+	 */
+	Geom: {
+		/**
+		 * Linear interpolation is like drawing straight lines between the points.
+		 */
+		Linear(v: number[], k: number): number {
+			const m = v.length - 1;
+			const f = m * k;
+			const i = Math.floor(f);
+			const fn = Interpolation.Utils.Linear;
 
-		if (k < 0) {
-			return fn(v[0], v[1], f);
-		}
-
-		if (k > 1) {
-			return fn(v[m], v[m - 1], m - f);
-		}
-
-		return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
-	},
-
-	Bezier(v: number[], k: number): number {
-		let b = 0;
-		const n = v.length - 1;
-		const pw = Math.pow;
-		const bn = Interpolation.Utils.Bernstein;
-
-		for (let i = 0; i <= n; i++) {
-			b += pw(1 - k, n - i) * pw(k, i) * v[i] * bn(n, i);
-		}
-
-		return b;
-	},
-
-	CatmullRom(v: number[], k: number): number {
-		const m = v.length - 1;
-		let f = m * k;
-		let i = Math.floor(f);
-		const fn = Interpolation.Utils.CatmullRom;
-
-		if (v[0] == v[m]) {
 			if (k < 0) {
-				i = Math.floor((f = m * (1 + k)));
+				return fn(v[0], v[1], f);
 			}
 
-			return fn(v[(i - 1 + m) % m], v[i], v[(i + 1) % m], v[(i + 2) % m], f - i);
-		}
-		if (k < 0) {
-			return v[0] - (fn(v[0], v[0], v[1], v[1], -f) - v[0]);
-		}
+			if (k > 1) {
+				return fn(v[m], v[m - 1], m - f);
+			}
 
-		if (k > 1) {
-			return v[m] - (fn(v[m], v[m], v[m - 1], v[m - 1], f - m) - v[m]);
-		}
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
+		},
 
-		return fn(v[i ? i - 1 : 0], v[i], v[m < i + 1 ? m : i + 1], v[m < i + 2 ? m : i + 2], f - i);
+		/**
+		 * A Bézier curve is defined by a set of control points P0 through Pn, where n is called its order.
+		 * The first and last control points are always the end points of the curve; however, the intermediate control points (if any) generally do not lie on the curve.
+		 *
+		 * https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Explicit_definition
+		 */
+		Bezier(v: number[], k: number): number {
+			let b = 0;
+			const n = v.length - 1;
+			const pw = Math.pow;
+			const bn = Interpolation.Utils.Bernstein;
+
+			for (let i = 0; i <= n; i++) {
+				b += bn(n, i) * pw(1 - k, n - i) * pw(k, i) * v[i];
+			}
+
+			return b;
+		},
+
+		/**
+		 * A Catmullrom spline is a curve where the original set of points is also used as control points.
+		 * Usually Catmullrom splines need two extra elements at the beginning and the end of the point set. This function contemplates that and doesn't need them.
+		 *
+		 * https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull%E2%80%93Rom_spline
+		 */
+		CatmullRom(v: number[], k: number): number {
+			const m = v.length - 1;
+			let f = m * k;
+			let i = Math.floor(f);
+			const fn = Interpolation.Utils.CatmullRom;
+
+			if (v[0] == v[m]) {
+				if (k < 0) {
+					i = Math.floor((f = m * (1 + k)));
+				}
+
+				return fn(v[(i - 1 + m) % m], v[i], v[(i + 1) % m], v[(i + 2) % m], f - i);
+			}
+			if (k < 0) {
+				return v[0] - (fn(v[0], v[0], v[1], v[1], -f) - v[0]);
+			}
+
+			if (k > 1) {
+				return v[m] - (fn(v[m], v[m], v[m - 1], v[m - 1], f - m) - v[m]);
+			}
+
+			return fn(v[i ? i - 1 : 0], v[i], v[m < i + 1 ? m : i + 1], v[m < i + 2 ? m : i + 2], f - i);
+		},
+	},
+	/**
+	 * Given the spinny nature of angles, sometimes it's better to go back to get to the right place earlier.
+	 * This functions help with that.
+	 */
+	Angle: {
+		/**
+		 * Normalizes angles between 0 and 2pi and then rotates the object in the shortest direction.
+		 */
+		Radians(v: number[], k: number): number {
+			const m = v.length - 1;
+			const f = m * k;
+			const i = Math.floor(f);
+			const fn = Interpolation.Utils.WrapLinear;
+
+			if (k < 0) {
+				return fn(v[0], v[1], f, 2 * Math.PI);
+			}
+
+			if (k > 1) {
+				return fn(v[m], v[m - 1], m - f, 2 * Math.PI);
+			}
+
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i, 2 * Math.PI);
+		},
+
+		/**
+		 * Normalizes angles between 0 and 360 and then rotates the object in the shortest direction.
+		 */
+		Degrees(v: number[], k: number): number {
+			const m = v.length - 1;
+			const f = m * k;
+			const i = Math.floor(f);
+			const fn = Interpolation.Utils.WrapLinear;
+
+			if (k < 0) {
+				return fn(v[0], v[1], f, 360);
+			}
+
+			if (k > 1) {
+				return fn(v[m], v[m - 1], m - f, 360);
+			}
+
+			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i, 360);
+		},
 	},
 
+	/**
+	 * Even if colors are numbers, interpolating them can be tricky.
+	 */
 	Color: {
+		/**
+		 * Interpolates the color by their channels Red, Green, and Blue.
+		 */
 		RGB(v: number[], k: number): number {
 			const m = v.length - 1;
 			const f = m * k;
@@ -79,6 +151,9 @@ export const Interpolation = {
 			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
 		},
 
+		/**
+		 * Interpolates the color by their Hue, Saturation, and Value.
+		 */
 		HSV(v: number[], k: number): number {
 			const m = v.length - 1;
 			const f = m * k;
@@ -95,6 +170,10 @@ export const Interpolation = {
 
 			return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
 		},
+
+		/**
+		 * Interpolates the color by their Hue, Chroma, and Lightness.
+		 */
 		HCL(v: number[], k: number): number {
 			const m = v.length - 1;
 			const f = m * k;
@@ -113,6 +192,9 @@ export const Interpolation = {
 		},
 	},
 
+	/**
+	 * Helper functions used to calculate the different interpolations
+	 */
 	Utils: {
 		RGBsplit(color: number): ARGB {
 			// this gets named ARGB but it is actually meaningless. It will work with RGBA just the same.
@@ -264,6 +346,26 @@ export const Interpolation = {
 				RGB.b = RGB.b * V + U;
 			}
 			return (RGB.a << 24) | (RGB.r << 16) | (RGB.g << 8) | RGB.b;
+		},
+
+		WrapLinear(value1: number, value2: number, t: number, maxValue: number): number {
+			let retval: number;
+
+			// this fixes my values to be between 0 and maxvalue.
+			value1 = (value1 + maxValue * Math.trunc(Math.abs(value1 / maxValue))) % maxValue;
+			value2 = (value2 + maxValue * Math.trunc(Math.abs(value2 / maxValue))) % maxValue;
+
+			if (Math.abs(value1 - value2) <= 0.5 * maxValue) {
+				retval = Interpolation.Utils.Linear(value1, value2, t);
+			} else {
+				if (value1 < value2) {
+					retval = Interpolation.Utils.Linear(value1 + maxValue, value2, t);
+				} else {
+					retval = Interpolation.Utils.Linear(value1, value2 + maxValue, t);
+				}
+				retval = retval % maxValue;
+			}
+			return retval;
 		},
 
 		RGBLinear(color1: number, color2: number, t: number): number {
