@@ -213,7 +213,7 @@ test("Tween with array interpolation values", () => {
 		.repeat(1)
 		.yoyo(true)
 		.easing(Easing.Linear.None)
-		.interpolation(Interpolation.Linear);
+		.interpolation(Interpolation.Geom.Linear);
 
 	expect(o.a).toBe(0);
 
@@ -248,6 +248,10 @@ test("Tween with array interpolation values", () => {
 	t.update(125);
 
 	expect(o.a).toBe(7);
+
+	t.update(125);
+
+	expect(o.a).toBe(6);
 });
 
 test("Tween with string values (relatives and absolutes)", () => {

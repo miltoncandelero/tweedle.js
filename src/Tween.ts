@@ -30,7 +30,7 @@ export class Tween<Target> {
 	private _timescale = 1;
 	private _easingFunction: EasingFunction = Easing.Linear.None;
 	private _yoyoEasingFunction: EasingFunction = undefined;
-	private _interpolationFunction: InterpolationFunction = Interpolation.Linear;
+	private _interpolationFunction: InterpolationFunction = Interpolation.Geom.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
 	private _onStartCallback?: (object: Target) => void;
 	private _onStartCallbackFired = false;
@@ -279,21 +279,6 @@ export class Tween<Target> {
 			// we should not set that property in the object
 			if (propType == "undefined" || propType == "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber && !startValueIsObject)) {
 				continue;
-			}
-
-			// Check if an Array was provided as property value
-			if (isInterpolationList) {
-				let endValues: Array<number | string> = _valuesEnd[property];
-
-				if (endValues.length == 0) {
-					continue;
-				}
-
-				// handle an array of relative values
-				endValues = endValues.map(this._handleRelativeValue.bind(this, startValue));
-
-				// Create a local copy of the Array with the start value at the front
-				_valuesEnd[property] = [startValue].concat(endValues);
 			}
 
 			// handle the deepness of the values
@@ -744,7 +729,11 @@ export class Tween<Target> {
 			const isInterpolationList = !startIsArray && endIsArray;
 
 			if (isInterpolationList) {
-				_object[property] = this._interpolationFunction(end as Array<number>, value);
+				if (this._reversed) {
+					_object[property] = this._interpolationFunction(end.concat([start]) as Array<number>, value);
+				} else {
+					_object[property] = this._interpolationFunction([start].concat(end) as Array<number>, value);
+				}
 			} else if (typeof end == "object" && end) {
 				this._updateProperties(_object[property], start, end, value);
 			} else {

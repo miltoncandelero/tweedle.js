@@ -1,4 +1,5 @@
 import { Easing } from "../src/Easing";
+import { Interpolation } from "../src/Interpolation";
 import { Tween } from "../src/Tween";
 
 test("Tween from changes the start value", () => {
@@ -161,4 +162,53 @@ test("Tween from throws when feeded a circular object", () => {
 
 	// throws when called with a circular reference
 	expect(() => t.from(a)).toThrow();
+});
+
+test("Tween from with array interpolation values", () => {
+	const o = { a: 100 };
+	const t = new Tween(o)
+		.to({ a: [1, 3, 5, 7] }, 1000)
+		.start()
+		.from({ a: 0 })
+		.repeat(1)
+		.yoyo(true)
+		.easing(Easing.Linear.None)
+		.interpolation(Interpolation.Geom.Linear);
+
+	expect(o.a).toBe(100);
+
+	t.update(0);
+	expect(o.a).toBe(0);
+
+	t.update(125);
+
+	expect(o.a).toBe(0.5);
+
+	t.update(125);
+
+	expect(o.a).toBe(1);
+
+	t.update(125);
+
+	expect(o.a).toBe(2);
+
+	t.update(125);
+
+	expect(o.a).toBe(3);
+
+	t.update(125);
+
+	expect(o.a).toBe(4);
+
+	t.update(125);
+
+	expect(o.a).toBe(5);
+
+	t.update(125);
+
+	expect(o.a).toBe(6);
+
+	t.update(125);
+
+	expect(o.a).toBe(7);
 });

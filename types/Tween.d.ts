@@ -25,8 +25,9 @@ export declare class Tween<Target> {
     private _delayTime;
     private _startTime;
     private _elapsedTime;
-    private _timeScale;
+    private _timescale;
     private _easingFunction;
+    private _yoyoEasingFunction;
     private _interpolationFunction;
     private _chainedTweens;
     private _onStartCallback?;
@@ -58,6 +59,11 @@ export declare class Tween<Target> {
      */
     getGroup(): Group;
     /**
+     * Gets the timescale for this tween. The timescale is a factor by which each deltatime is multiplied, allowing to speed up or slow down the tween.
+     * @returns returns the timescale for this tween.
+     */
+    getTimescale(): number;
+    /**
      * A tween is playing when it has been started but hasn't ended yet. This has nothing to do with pausing. For that see {@link Tween.isPaused}.
      * @returns returns true if this tween is playing.
      */
@@ -68,7 +74,6 @@ export declare class Tween<Target> {
      */
     isPaused(): boolean;
     /**
-     * @experimental
      * Writes the starting values of the tween.
      *
      * **Starting values generated from {@link Tween.start} will be overwritten.**
@@ -181,7 +186,6 @@ export declare class Tween<Target> {
      */
     delay(amount: number): this;
     /**
-     * @experimental
      * Sets the timescale for this tween.
      * The deltaTime inside the update will be multiplied by this value allowing to speed up or slow down the flow of time.
      * @param multiplier - the timescale value for this tween.
@@ -216,6 +220,15 @@ export declare class Tween<Target> {
      * @returns returns this tween for daisy chaining methods.
      */
     easing(easingFunction: EasingFunction): this;
+    /**
+     * @experimental
+     * Sets the easing function to interpolate the starting values with the final values on the way back due to a yoyo tween.
+     *
+     * You can use the functions inside the {@link Easing} object.
+     * @param easingFunction - a function that takes a number between 0 and 1 and returns another number between 0 and 1
+     * @returns returns this tween for daisy chaining methods.
+     */
+    yoyoEasing(easingFunction: EasingFunction): this;
     /**
      * Sets the easing function to interpolate the starting values with the final values when the final value is an array of objects.
      * Use this to create bezier curves or interpolate colors.
@@ -265,9 +278,11 @@ export declare class Tween<Target> {
     /**
      * Updates this tween
      * @param deltaTime - the amount of time that passed since last update in **miliseconds**
+     * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens from their group.
      * @returns returns true if the tween hasn't finished yet.
      */
-    update(deltaTime: number): boolean;
+    update(deltaTime: number, preserve?: boolean): boolean;
+    private _internalUpdate;
     private _updateProperties;
     private _handleRelativeValue;
     private _swapEndStartRepeatValues;

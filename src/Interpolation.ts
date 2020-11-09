@@ -64,9 +64,9 @@ export const Interpolation = {
 			const i1: number = i0 + 1;
 			const i2: number = i0 + 2;
 
-			b += bn(2, 0) * pw(1 - t, 2 - 0) * pw(t, i) * v[i0];
-			b += bn(2, 1) * pw(1 - t, 2 - 1) * pw(t, i) * v[i1];
-			b += bn(2, 2) * pw(1 - t, 2 - 2) * pw(t, i) * v[i2];
+			b += bn(2, 0) * pw(1 - t, 2 - 0) * pw(t, 0) * v[i0];
+			b += bn(2, 1) * pw(1 - t, 2 - 1) * pw(t, 1) * v[i1];
+			b += bn(2, 2) * pw(1 - t, 2 - 2) * pw(t, 2) * v[i2];
 
 			return b;
 		},
@@ -87,10 +87,10 @@ export const Interpolation = {
 			const i2: number = i0 + 2;
 			const i3: number = i0 + 3;
 
-			b += bn(3, 0) * pw(1 - t, 3 - 0) * pw(t, i) * v[i0];
-			b += bn(3, 1) * pw(1 - t, 3 - 1) * pw(t, i) * v[i1];
-			b += bn(3, 2) * pw(1 - t, 3 - 2) * pw(t, i) * v[i2];
-			b += bn(3, 3) * pw(1 - t, 3 - 3) * pw(t, i) * v[i3];
+			b += bn(3, 0) * pw(1 - t, 3 - 0) * pw(t, 0) * v[i0];
+			b += bn(3, 1) * pw(1 - t, 3 - 1) * pw(t, 1) * v[i1];
+			b += bn(3, 2) * pw(1 - t, 3 - 2) * pw(t, 2) * v[i2];
+			b += bn(3, 3) * pw(1 - t, 3 - 3) * pw(t, 3) * v[i3];
 
 			return b;
 		},
