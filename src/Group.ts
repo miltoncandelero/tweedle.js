@@ -27,6 +27,35 @@ export class Group {
 		return Group._shared;
 	}
 
+	private _paused: boolean = false;
+
+	/**
+	 * A paused group will skip updating all the asociated tweens.
+	 * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+	 * @returns returns true if this group is paused.
+	 */
+	public isPaused(): boolean {
+		return this._paused;
+	}
+
+	/**
+	 * Pauses this group. If a group was already paused, this has no effect.
+	 * A paused group will skip updating all the asociated tweens.
+	 * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+	 */
+	public pause(): void {
+		this._paused = true;
+	}
+
+	/**
+	 * Resumes this group. If a group was not paused, this has no effect.
+	 * A paused group will skip updating all the asociated tweens.
+	 * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+	 */
+	public resume(): void {
+		this._paused = false;
+	}
+
 	private _lastUpdateTime: number = undefined;
 
 	/**
@@ -88,11 +117,10 @@ export class Group {
 	 *  then it will not be updated.
 	 * @param deltaTime - Amount of **miliseconds** that have passed since last excecution. If not provided it will be calculated using the {@link Group.now} function
 	 * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens.
-	 * @returns returns true if the group is not empty.
+	 * @returns returns true if the group is not empty and it is not paused.
 	 */
 	public update(deltaTime?: number, preserve: boolean = false): boolean {
-		let tweenIds = Object.keys(this._tweens);
-
+		// move forward the automatic dt if needed
 		if (deltaTime == undefined) {
 			// now varies from line to line, that's why I manually use 0 as dt
 			if (this._lastUpdateTime == undefined) {
@@ -102,9 +130,14 @@ export class Group {
 				deltaTime = this.now() - this._lastUpdateTime;
 			}
 		}
-
 		this._lastUpdateTime = this.now();
 
+		// exit early if the entire group is paused
+		if (this._paused) {
+			return false;
+		}
+
+		let tweenIds = Object.keys(this._tweens);
 		if (tweenIds.length == 0) {
 			return false;
 		}
