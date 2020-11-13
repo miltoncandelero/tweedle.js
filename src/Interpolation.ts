@@ -51,6 +51,10 @@ export const Interpolation = {
 			return b;
 		},
 
+		/**
+		 * Assumes your points are a succession of quadratic bezier curves where the endpoint of one is the start point of the next one.
+		 * for example: `[Point in the curve, Control point, Point in the curve, Control point, Point in the curve]`
+		 */
 		QuadraticBezier(v: number[], k: number): number {
 			let b = 0;
 			const n = v.length - 1;
@@ -71,6 +75,10 @@ export const Interpolation = {
 			return b;
 		},
 
+		/**
+		 * Assumes your points are a succession of cubic bezier curves where the endpoint of one is the start point of the next one.
+		 * for example: `[Point in the curve, Control point, Control point, Point in the curve, Control point, Control point, Point in the curve]`
+		 */
 		CubicBezier(v: number[], k: number): number {
 			let b = 0;
 			const n = v.length - 1;
