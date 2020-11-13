@@ -2381,10 +2381,19 @@ img {
 					<a href="group.html#getall" class="tsd-kind-icon">get<wbr>All</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="group.html#ispaused" class="tsd-kind-icon">is<wbr>Paused</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="group.html#pause" class="tsd-kind-icon">pause</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="group.html#remove" class="tsd-kind-icon">remove</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="group.html#removeall" class="tsd-kind-icon">remove<wbr>All</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="group.html#resume" class="tsd-kind-icon">resume</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="group.html#update" class="tsd-kind-icon">update</a>
@@ -2447,8 +2456,11 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#add" class="tsd-kind-icon">add</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#getall" class="tsd-kind-icon">get<wbr>All</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#ispaused" class="tsd-kind-icon">is<wbr>Paused</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#pause" class="tsd-kind-icon">pause</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#remove" class="tsd-kind-icon">remove</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#removeall" class="tsd-kind-icon">remove<wbr>All</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#resume" class="tsd-kind-icon">resume</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="group.html#update" class="tsd-kind-icon">update</a></li>
 						</ul>
 					</section>
@@ -2463,7 +2475,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">now<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = NOW</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L36">Group.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L65">Group.ts:65</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2501,7 +2513,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L23">Group.ts:23</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L23">Group.ts:23</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2526,7 +2538,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L63">Group.ts:63</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L92">Group.ts:92</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2558,7 +2570,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L44">Group.ts:44</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L73">Group.ts:73</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2573,6 +2585,54 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="ispaused" class="tsd-anchor"></a>
+				<h3>is<wbr>Paused</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">is<wbr>Paused<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L37">Group.ts:37</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A paused group will skip updating all the asociated tweens.
+								<em>To control all tweens, use <a href="group.html#getall">Group.getAll</a> to get an array with all tweens.</em></p>
+							</div>
+						</div>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>returns true if this group is paused.</p>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="pause" class="tsd-anchor"></a>
+				<h3>pause</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">pause<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L46">Group.ts:46</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Pauses this group. If a group was already paused, this has no effect.
+									A paused group will skip updating all the asociated tweens.
+								<em>To control all tweens, use <a href="group.html#getall">Group.getAll</a> to get an array with all tweens.</em></p>
+							</div>
+						</div>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="remove" class="tsd-anchor"></a>
 				<h3>remove</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -2582,7 +2642,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L74">Group.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L103">Group.ts:103</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2613,7 +2673,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L53">Group.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L82">Group.ts:82</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2621,6 +2681,30 @@ img {
 								<p>Removes all the tweens in this group.</p>
 							</div>
 							<p><em>note: this will not modify the group reference inside the tween object</em></p>
+						</div>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="resume" class="tsd-anchor"></a>
+				<h3>resume</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">resume<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L55">Group.ts:55</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Resumes this group. If a group was not paused, this has no effect.
+									A paused group will skip updating all the asociated tweens.
+								<em>To control all tweens, use <a href="group.html#getall">Group.getAll</a> to get an array with all tweens.</em></p>
+							</div>
 						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 					</li>
@@ -2636,7 +2720,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/4e85a5d/src/Group.ts#L93">Group.ts:93</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Group.ts#L122">Group.ts:122</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2666,7 +2750,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						<p>returns true if the group is not empty.</p>
+						<p>returns true if the group is not empty and it is not paused.</p>
 					</li>
 				</ul>
 			</section>
