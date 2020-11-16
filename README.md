@@ -4,7 +4,7 @@
 ## What is a tween?
 A tween is an easy way to animate something. You tell a property to be at a certain value after so many seconds and look at it go!
 
-## [API documentation] (https://miltoncandelero.github.io/tweedle.js/)
+## [API documentation](https://miltoncandelero.github.io/tweedle.js/)
 
 ## How do I use this?
 If you are on the browser, use the `iife` package and use the global `TWEEDLE` to find what you need. If you are using npm you can import just what you need (we also have typescript support out of the box).  
