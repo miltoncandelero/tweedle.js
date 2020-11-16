@@ -23,11 +23,12 @@ const tweenLoop = () => {
 	Group.shared.update();
 	requestAnimationFrame(tweenLoop);
 }
+tweenLoop();
 ```
 
 ## Easings, Interpolations, Events, Chains, Deep objects, and more!
 Tweedle supports all of [Robert Penner easing functions](http://robertpenner.com/easing/), has Interpolation for bezier curves, colors and rotations, fires events onStart, onUpdate, onLoop, onEnd, can chain tweens so they start right after the previous one ends, allows to modify deep properties of objects and many more features that I need to write demos and tests for.  
-Feel free to dive the [API documentation] (https://miltoncandelero.github.io/tweedle.js/) and read more there since all functions are documented.
+Feel free to dive the [API documentation](https://miltoncandelero.github.io/tweedle.js/) and read more there since all functions are documented.
 
 ## Helping Tweedle
 Tweedle uses Jest for testing and I was considering using PixiJS to do some demos.  
