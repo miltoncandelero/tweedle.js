@@ -12,6 +12,25 @@ export declare class Group {
      * A tween without an explicit group will default to this shared static one.
      */
     static get shared(): Group;
+    private _paused;
+    /**
+     * A paused group will skip updating all the asociated tweens.
+     * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+     * @returns returns true if this group is paused.
+     */
+    isPaused(): boolean;
+    /**
+     * Pauses this group. If a group was already paused, this has no effect.
+     * A paused group will skip updating all the asociated tweens.
+     * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+     */
+    pause(): void;
+    /**
+     * Resumes this group. If a group was not paused, this has no effect.
+     * A paused group will skip updating all the asociated tweens.
+     * _To control all tweens, use {@link Group.getAll} to get an array with all tweens._
+     */
+    resume(): void;
     private _lastUpdateTime;
     /**
      * Function used by the group to know what time is it.
@@ -57,7 +76,7 @@ export declare class Group {
      *  then it will not be updated.
      * @param deltaTime - Amount of **miliseconds** that have passed since last excecution. If not provided it will be calculated using the {@link Group.now} function
      * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens.
-     * @returns returns true if the group is not empty.
+     * @returns returns true if the group is not empty and it is not paused.
      */
     update(deltaTime?: number, preserve?: boolean): boolean;
 }

@@ -2391,7 +2391,36 @@ img {
 			<a href="#tweedlejs" id="tweedlejs" style="color: inherit; text-decoration: none;">
 				<h1>Tweedle.js</h1>
 			</a>
-			<p>Tweedle.js is my fork of tween.js made to fit my needs at Killabunnies.</p>
+			<p><a href="https://nodei.co/npm/tweedle.js/"><img src="https://nodei.co/npm/tweedle.js.png?compact=true" alt="NPM"></a></p>
+			<a href="#what-is-a-tween" id="what-is-a-tween" style="color: inherit; text-decoration: none;">
+				<h2>What is a tween?</h2>
+			</a>
+			<p>A tween is an easy way to animate something. You tell a property to be at a certain value after so many seconds and look at it go!</p>
+			<a href="#api-documentation-httpsmiltoncandelerogithubiotweedlejs" id="api-documentation-httpsmiltoncandelerogithubiotweedlejs" style="color: inherit; text-decoration: none;">
+				<h2>[API documentation] (<a href="https://miltoncandelero.github.io/tweedle.js/">https://miltoncandelero.github.io/tweedle.js/</a>)</h2>
+			</a>
+			<a href="#how-do-i-use-this" id="how-do-i-use-this" style="color: inherit; text-decoration: none;">
+				<h2>How do I use this?</h2>
+			</a>
+			<p>If you are on the browser, use the <code>iife</code> package and use the global <code>TWEEDLE</code> to find what you need. If you are using npm you can import just what you need (we also have typescript support out of the box).<br>The overall syntax is this:</p>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> myObject = { <span class="hljs-attr">x</span>:<span class="hljs-number">0</span>, <span class="hljs-attr">y</span>:<span class="hljs-number">0</span> };
+<span class="hljs-keyword">new</span> Tween(myObject).to({ <span class="hljs-attr">x</span>:<span class="hljs-number">100</span>, <span class="hljs-attr">y</span>:<span class="hljs-number">100</span> }, <span class="hljs-number">2500</span>).start();</code></pre>
+			<p>You can probably see that tweens are meant to be chain called and all functions return themselves so you can keep </p>
+			<p>But that&#39;s only half the trouble as Tweedle won&#39;t move time forward on itself. See, every tween that you don&#39;t assign a group, it belongs to the shared group and you must remember to update that group for your tweens to work.</p>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> tweenLoop = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    Group.shared.update();
+    requestAnimationFrame(tweenLoop);
+}</code></pre>
+			<a href="#easings-interpolations-events-chains-deep-objects-and-more" id="easings-interpolations-events-chains-deep-objects-and-more" style="color: inherit; text-decoration: none;">
+				<h2>Easings, Interpolations, Events, Chains, Deep objects, and more!</h2>
+			</a>
+			<p>Tweedle supports all of <a href="http://robertpenner.com/easing/">Robert Penner easing functions</a>, has Interpolation for bezier curves, colors and rotations, fires events onStart, onUpdate, onLoop, onEnd, can chain tweens so they start right after the previous one ends, allows to modify deep properties of objects and many more features that I need to write demos and tests for.<br>Feel free to dive the [API documentation] (<a href="https://miltoncandelero.github.io/tweedle.js/">https://miltoncandelero.github.io/tweedle.js/</a>) and read more there since all functions are documented.</p>
+			<a href="#helping-tweedle" id="helping-tweedle" style="color: inherit; text-decoration: none;">
+				<h2>Helping Tweedle</h2>
+			</a>
+			<p>Tweedle uses Jest for testing and I was considering using PixiJS to do some demos.<br>I am releasing this right now as is since it is quite functional and stable even when I don&#39;t have the tests to prove so.<br>Feel free to send me your demos or tests (even if the tests fail and you can&#39;t put the effort to make it pass, I still find that valuable!)  </p>
+			<hr>
+			<p>Tweedle.js is my fork of <a href="https://github.com/tweenjs/tween.js">tween.js</a> made with ♥ to fit my needs at Killabunnies.</p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
@@ -2430,7 +2459,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">NOW<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Now.ts#L5">Now.ts:5</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Now.ts#L5">Now.ts:5</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2458,10 +2487,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-variable">
 				<a name="version" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> VERSION</h3>
-				<div class="tsd-signature tsd-kind-icon">VERSION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"0.0.6"</span><span class="tsd-signature-symbol"> = &quot;0.0.6&quot;</span></div>
+				<div class="tsd-signature tsd-kind-icon">VERSION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"1.0.0"</span><span class="tsd-signature-symbol"> = &quot;1.0.0&quot;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Version.ts#L4">Version.ts:4</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Version.ts#L4">Version.ts:4</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2479,7 +2508,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Easing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L12">Easing.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L12">Easing.ts:12</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2496,7 +2525,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Back<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L168">Easing.ts:168</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L168">Easing.ts:168</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2509,7 +2538,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L169">Easing.ts:169</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L169">Easing.ts:169</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2532,7 +2561,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L179">Easing.ts:179</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L179">Easing.ts:179</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2555,7 +2584,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L174">Easing.ts:174</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L174">Easing.ts:174</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2575,7 +2604,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Bounce<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L189">Easing.ts:189</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L189">Easing.ts:189</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2588,7 +2617,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L190">Easing.ts:190</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L190">Easing.ts:190</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2611,7 +2640,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L204">Easing.ts:204</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L204">Easing.ts:204</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2634,7 +2663,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L193">Easing.ts:193</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L193">Easing.ts:193</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2654,7 +2683,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Circular<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L112">Easing.ts:112</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L112">Easing.ts:112</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2667,7 +2696,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L113">Easing.ts:113</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L113">Easing.ts:113</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2690,7 +2719,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L119">Easing.ts:119</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L119">Easing.ts:119</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2713,7 +2742,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L116">Easing.ts:116</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L116">Easing.ts:116</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2733,7 +2762,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Cubic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L33">Easing.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L33">Easing.ts:33</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2746,7 +2775,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L34">Easing.ts:34</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L34">Easing.ts:34</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2769,7 +2798,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L40">Easing.ts:40</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L40">Easing.ts:40</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2792,7 +2821,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L37">Easing.ts:37</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L37">Easing.ts:37</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2812,7 +2841,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Elastic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L127">Easing.ts:127</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L127">Easing.ts:127</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2825,7 +2854,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L128">Easing.ts:128</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L128">Easing.ts:128</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2848,7 +2877,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L150">Easing.ts:150</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L150">Easing.ts:150</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2871,7 +2900,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L139">Easing.ts:139</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L139">Easing.ts:139</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2891,7 +2920,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Exponential<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L89">Easing.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L89">Easing.ts:89</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2904,7 +2933,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L90">Easing.ts:90</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L90">Easing.ts:90</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2927,7 +2956,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L96">Easing.ts:96</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L96">Easing.ts:96</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2950,7 +2979,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L93">Easing.ts:93</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L93">Easing.ts:93</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2970,7 +2999,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Linear<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L13">Easing.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L13">Easing.ts:13</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -2983,7 +3012,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L14">Easing.ts:14</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L14">Easing.ts:14</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3003,7 +3032,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Quadratic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L18">Easing.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L18">Easing.ts:18</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -3016,7 +3045,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L19">Easing.ts:19</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L19">Easing.ts:19</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3039,7 +3068,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L25">Easing.ts:25</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L25">Easing.ts:25</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3062,7 +3091,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L22">Easing.ts:22</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L22">Easing.ts:22</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3082,7 +3111,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Quartic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L48">Easing.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L48">Easing.ts:48</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -3095,7 +3124,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L49">Easing.ts:49</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L49">Easing.ts:49</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3118,7 +3147,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L55">Easing.ts:55</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L55">Easing.ts:55</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3141,7 +3170,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L52">Easing.ts:52</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L52">Easing.ts:52</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3161,7 +3190,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Quintic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L63">Easing.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L63">Easing.ts:63</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -3174,7 +3203,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L64">Easing.ts:64</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L64">Easing.ts:64</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3197,7 +3226,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L70">Easing.ts:70</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L70">Easing.ts:70</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3220,7 +3249,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L67">Easing.ts:67</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L67">Easing.ts:67</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3240,7 +3269,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Sinusoidal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L78">Easing.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L78">Easing.ts:78</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -3253,7 +3282,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L79">Easing.ts:79</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L79">Easing.ts:79</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3276,7 +3305,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L85">Easing.ts:85</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L85">Easing.ts:85</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3299,7 +3328,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Easing.ts#L82">Easing.ts:82</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Easing.ts#L82">Easing.ts:82</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3320,7 +3349,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Interpolation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L10">Interpolation.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L10">Interpolation.ts:10</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -3335,7 +3364,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L140">Interpolation.ts:140</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L140">Interpolation.ts:140</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -3354,7 +3383,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L164">Interpolation.ts:164</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L164">Interpolation.ts:164</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3385,7 +3414,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L144">Interpolation.ts:144</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L144">Interpolation.ts:144</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3413,7 +3442,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L185">Interpolation.ts:185</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L185">Interpolation.ts:185</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -3431,7 +3460,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L229">Interpolation.ts:229</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L229">Interpolation.ts:229</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3462,7 +3491,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L209">Interpolation.ts:209</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L209">Interpolation.ts:209</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3493,7 +3522,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L189">Interpolation.ts:189</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L189">Interpolation.ts:189</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3521,7 +3550,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Geom<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L14">Interpolation.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L14">Interpolation.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -3539,7 +3568,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L41">Interpolation.ts:41</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L41">Interpolation.ts:41</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3572,7 +3601,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L112">Interpolation.ts:112</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L112">Interpolation.ts:112</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3605,7 +3634,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L82">Interpolation.ts:82</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L82">Interpolation.ts:82</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3637,7 +3666,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L18">Interpolation.ts:18</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L18">Interpolation.ts:18</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3668,7 +3697,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L58">Interpolation.ts:58</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L58">Interpolation.ts:58</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -3697,7 +3726,7 @@ img {
 					<div class="tsd-signature tsd-kind-icon">Utils<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L250">Interpolation.ts:250</a></li>
+							<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L250">Interpolation.ts:250</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -3711,7 +3740,7 @@ img {
 						<div class="tsd-signature tsd-kind-icon">Factorial<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol"> = (function () {const a &#x3D; [1];return function (n: number): number {let s &#x3D; 1;if (a[n]) {return a[n];}for (let i &#x3D; n; i &gt; 1; i--) {s *&#x3D; i;}a[n] &#x3D; s;return s;};})()</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L479">Interpolation.ts:479</a></li>
+								<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L479">Interpolation.ts:479</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -3725,7 +3754,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L474">Interpolation.ts:474</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L474">Interpolation.ts:474</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3751,7 +3780,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L499">Interpolation.ts:499</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L499">Interpolation.ts:499</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3786,7 +3815,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L348">Interpolation.ts:348</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L348">Interpolation.ts:348</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3809,7 +3838,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L451">Interpolation.ts:451</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L451">Interpolation.ts:451</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3838,7 +3867,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L324">Interpolation.ts:324</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L324">Interpolation.ts:324</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3861,7 +3890,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L292">Interpolation.ts:292</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L292">Interpolation.ts:292</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3884,7 +3913,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L432">Interpolation.ts:432</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L432">Interpolation.ts:432</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3913,7 +3942,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L259">Interpolation.ts:259</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L259">Interpolation.ts:259</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3936,7 +3965,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L471">Interpolation.ts:471</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L471">Interpolation.ts:471</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3965,7 +3994,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L423">Interpolation.ts:423</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L423">Interpolation.ts:423</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3994,7 +4023,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L251">Interpolation.ts:251</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L251">Interpolation.ts:251</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4017,7 +4046,7 @@ img {
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/dee03b3/src/Interpolation.ts#L403">Interpolation.ts:403</a></li>
+										<li>Defined in <a href="https://github.com/miltoncandelero/tween/blob/9d4a927/src/Interpolation.ts#L403">Interpolation.ts:403</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>

@@ -22,7 +22,15 @@ export declare const Interpolation: {
          * https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Explicit_definition
          */
         Bezier(v: number[], k: number): number;
+        /**
+         * Assumes your points are a succession of quadratic bezier curves where the endpoint of one is the start point of the next one.
+         * for example: `[Point in the curve, Control point, Point in the curve, Control point, Point in the curve]`
+         */
         QuadraticBezier(v: number[], k: number): number;
+        /**
+         * Assumes your points are a succession of cubic bezier curves where the endpoint of one is the start point of the next one.
+         * for example: `[Point in the curve, Control point, Control point, Point in the curve, Control point, Control point, Point in the curve]`
+         */
         CubicBezier(v: number[], k: number): number;
         /**
          * A Catmullrom spline is a curve where the original set of points is also used as control points.
