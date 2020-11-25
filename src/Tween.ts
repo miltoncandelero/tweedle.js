@@ -32,12 +32,12 @@ export class Tween<Target> {
 	private _yoyoEasingFunction: EasingFunction = undefined;
 	private _interpolationFunction: InterpolationFunction = Interpolation.Geom.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
-	private _onStartCallback?: (object: Target) => void;
+	private _onStartCallback?: (object: Target, tweenRef: this) => void;
 	private _onStartCallbackFired = false;
-	private _onUpdateCallback?: (object: Target, elapsed: number) => void;
-	private _onRepeatCallback?: (object: Target) => void;
-	private _onCompleteCallback?: (object: Target) => void;
-	private _onStopCallback?: (object: Target) => void;
+	private _onUpdateCallback?: (object: Target, elapsed: number, tweenRef: this) => void;
+	private _onRepeatCallback?: (object: Target, tweenRef: this) => void;
+	private _onCompleteCallback?: (object: Target, tweenRef: this) => void;
+	private _onStopCallback?: (object: Target, tweenRef: this) => void;
 	private _id = Sequence.nextId();
 	private _isChainStopped = false;
 	private _object: Target;
@@ -329,7 +329,7 @@ export class Tween<Target> {
 		this._isPaused = false;
 
 		if (this._onStopCallback) {
-			this._onStopCallback(this._object);
+			this._onStopCallback(this._object, this);
 		}
 
 		return this;
@@ -519,10 +519,10 @@ export class Tween<Target> {
 
 	/**
 	 * Sets the onStart callback
-	 * @param callback - the function to call on start. It will recieve the target object as a parameter.
+	 * @param callback - the function to call on start. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onStart(callback: (object: Target) => void): this {
+	public onStart(callback: (object: Target, tween: this) => void): this {
 		this._onStartCallback = callback;
 
 		return this;
@@ -530,10 +530,10 @@ export class Tween<Target> {
 
 	/**
 	 * Sets the onStart callback
-	 * @param callback - the function to call on start. It will recieve the target object as a parameter and a number between 0 and 1 determining the progress of the tween.
+	 * @param callback - the function to call on start. It will recieve the target object, this tween, and a number between 0 and 1 determining the progress as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onUpdate(callback: (object: Target, elapsed: number) => void): this {
+	public onUpdate(callback: (object: Target, elapsed: number, tween: this) => void): this {
 		this._onUpdateCallback = callback;
 
 		return this;
@@ -541,10 +541,10 @@ export class Tween<Target> {
 
 	/**
 	 * Sets the onRepeat callback
-	 * @param callback - the function to call on repeat. It will recieve the target object as a parameter.
+	 * @param callback - the function to call on repeat. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onRepeat(callback: (object: Target) => void): this {
+	public onRepeat(callback: (object: Target, tween: this) => void): this {
 		this._onRepeatCallback = callback;
 
 		return this;
@@ -552,10 +552,10 @@ export class Tween<Target> {
 
 	/**
 	 * Sets the onComplete callback
-	 * @param callback - the function to call on complete. It will recieve the target object as a parameter.
+	 * @param callback - the function to call on complete. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onComplete(callback: (object: Target) => void): this {
+	public onComplete(callback: (object: Target, tween: this) => void): this {
 		this._onCompleteCallback = callback;
 
 		return this;
@@ -563,10 +563,10 @@ export class Tween<Target> {
 
 	/**
 	 * Sets the onStop callback
-	 * @param callback - the function to call on stop. It will recieve the target object as a parameter.
+	 * @param callback - the function to call on stop. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onStop(callback: (object: Target) => void): this {
+	public onStop(callback: (object: Target, tween: this) => void): this {
 		this._onStopCallback = callback;
 
 		return this;
@@ -611,7 +611,7 @@ export class Tween<Target> {
 
 		if (this._onStartCallbackFired == false) {
 			if (this._onStartCallback) {
-				this._onStartCallback(this._object);
+				this._onStartCallback(this._object, this);
 			}
 
 			this._onStartCallbackFired = true;
@@ -643,7 +643,7 @@ export class Tween<Target> {
 
 		// if there is absolutely no chance to loop, call update. we will be done.
 		if (this._onUpdateCallback && (elapsed != 1 || this._repeat <= 0)) {
-			this._onUpdateCallback(this._object, elapsed);
+			this._onUpdateCallback(this._object, elapsed, this);
 		}
 
 		if (elapsed == 1) {
@@ -654,7 +654,7 @@ export class Tween<Target> {
 				}
 
 				if (this._onUpdateCallback && (this._repeat < 0 || leftOverTime <= 0)) {
-					this._onUpdateCallback(this._object, elapsed);
+					this._onUpdateCallback(this._object, elapsed, this);
 				}
 
 				// fix starting values for yoyo or relative
@@ -680,7 +680,7 @@ export class Tween<Target> {
 				}
 
 				if (this._onRepeatCallback) {
-					this._onRepeatCallback(this._object);
+					this._onRepeatCallback(this._object, this);
 				}
 
 				this._elapsedTime = 0; // reset the elapsed time
@@ -698,13 +698,16 @@ export class Tween<Target> {
 				}
 			}
 			if (this._onCompleteCallback) {
-				this._onCompleteCallback(this._object);
+				this._onCompleteCallback(this._object, this);
 			}
 
 			for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
 				// Make the chained tweens start exactly at the time they should,
 				// even if the `update()` method was called way past the duration of the tween
-				this._chainedTweens[i].start(this._startTime + this._duration);
+				this._chainedTweens[i].start();
+				if (leftOverTime > 0) {
+					this._chainedTweens[i].update(leftOverTime);
+				}
 			}
 
 			this._isPlaying = false;

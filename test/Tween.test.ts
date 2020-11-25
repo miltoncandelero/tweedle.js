@@ -382,3 +382,43 @@ test("Tween delay doesn't break the easing", () => {
 
 	expect(o.a).toBe(1);
 });
+
+test("Tween chain() works", () => {
+	const o1 = { a: 0 };
+	const o2 = { a: 0 };
+	const o3 = { a: 0 };
+
+	const g = new Group();
+
+	const t3 = new Tween(o3, g).to({ a: 1 }, 100);
+	const t2 = new Tween(o2, g).to({ a: 1 }, 100).chain(t3);
+	new Tween(o1, g).to({ a: 1 }, 100).start().chain(t2);
+
+	expect(o1.a).toBe(0);
+	expect(o2.a).toBe(0);
+	expect(o3.a).toBe(0);
+
+	g.update(50);
+
+	expect(o1.a).toBe(0.5);
+	expect(o2.a).toBe(0);
+	expect(o3.a).toBe(0);
+
+	g.update(50);
+
+	expect(o1.a).toBe(1);
+	expect(o2.a).toBe(0);
+	expect(o3.a).toBe(0);
+
+	g.update(50);
+
+	expect(o1.a).toBe(1);
+	expect(o2.a).toBe(0.5);
+	expect(o3.a).toBe(0);
+
+	g.update(100);
+
+	expect(o1.a).toBe(1);
+	expect(o2.a).toBe(1);
+	expect(o3.a).toBe(0.5);
+});
