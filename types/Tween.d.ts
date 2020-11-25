@@ -247,34 +247,34 @@ export declare class Tween<Target> {
     chain(...tweens: Array<Tween<any>>): this;
     /**
      * Sets the onStart callback
-     * @param callback - the function to call on start. It will recieve the target object as a parameter.
+     * @param callback - the function to call on start. It will recieve the target object and this tween as a parameter.
      * @returns returns this tween for daisy chaining methods.
      */
-    onStart(callback: (object: Target) => void): this;
+    onStart(callback: (object: Target, tween: this) => void): this;
     /**
      * Sets the onStart callback
-     * @param callback - the function to call on start. It will recieve the target object as a parameter and a number between 0 and 1 determining the progress of the tween.
+     * @param callback - the function to call on start. It will recieve the target object, this tween, and a number between 0 and 1 determining the progress as a parameter.
      * @returns returns this tween for daisy chaining methods.
      */
-    onUpdate(callback: (object: Target, elapsed: number) => void): this;
+    onUpdate(callback: (object: Target, elapsed: number, tween: this) => void): this;
     /**
      * Sets the onRepeat callback
-     * @param callback - the function to call on repeat. It will recieve the target object as a parameter.
+     * @param callback - the function to call on repeat. It will recieve the target object and this tween as a parameter.
      * @returns returns this tween for daisy chaining methods.
      */
-    onRepeat(callback: (object: Target) => void): this;
+    onRepeat(callback: (object: Target, tween: this) => void): this;
     /**
      * Sets the onComplete callback
-     * @param callback - the function to call on complete. It will recieve the target object as a parameter.
+     * @param callback - the function to call on complete. It will recieve the target object and this tween as a parameter.
      * @returns returns this tween for daisy chaining methods.
      */
-    onComplete(callback: (object: Target) => void): this;
+    onComplete(callback: (object: Target, tween: this) => void): this;
     /**
      * Sets the onStop callback
-     * @param callback - the function to call on stop. It will recieve the target object as a parameter.
+     * @param callback - the function to call on stop. It will recieve the target object and this tween as a parameter.
      * @returns returns this tween for daisy chaining methods.
      */
-    onStop(callback: (object: Target) => void): this;
+    onStop(callback: (object: Target, tween: this) => void): this;
     /**
      * Updates this tween
      * @param deltaTime - the amount of time that passed since last update in **miliseconds**

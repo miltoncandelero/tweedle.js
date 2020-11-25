@@ -6,7 +6,6 @@ import type { Tween } from "./Tween";
  */
 export declare class Group {
     private _tweens;
-    private _tweensAddedDuringUpdate;
     private static _shared;
     /**
      * A tween without an explicit group will default to this shared static one.
