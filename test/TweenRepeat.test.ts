@@ -208,3 +208,15 @@ test("Tween.end in a neverending repeat shouldn't endless loop", () => {
 	// Silly test but I am not sure how to test for infinite loops
 	expect(1).toBe(1);
 });
+
+test("Tween.end in a repeating tween should call all the onRepeat", () => {
+	const o = { a: 0 };
+	const g = new Group();
+	const complete = jest.fn();
+	const repeat = jest.fn();
+	const t = new Tween(o, g).to({ a: 1 }, 100).repeat(10).start().onComplete(complete).onRepeat(repeat);
+	t.end();
+
+	expect(complete).toHaveBeenCalledTimes(1);
+	expect(repeat).toHaveBeenCalledTimes(10);
+});

@@ -648,6 +648,9 @@ export class Tween<Target> {
 
 		if (elapsed == 1) {
 			if (this._repeat > 0) {
+				// store how many repeats we had for calling multiple repeats
+				const oldRepeat = this._repeat;
+
 				// substract loops
 				if (isFinite(this._repeat)) {
 					this._repeat -= loopsMade;
@@ -680,7 +683,20 @@ export class Tween<Target> {
 				}
 
 				if (this._onRepeatCallback) {
-					this._onRepeatCallback(this._object, this);
+					// ok, by default call once the repeat callback.
+					let callbackCount = 1;
+					if (Number.isFinite(loopsMade)) {
+						// if we have a logical number of loops, we trigger the callback that many times
+						callbackCount = loopsMade;
+					} else if (Number.isFinite(oldRepeat)) {
+						// if we didn't have a logical number on the loops made, it means that we substracted infinite amount of loops from the current loop.
+						// howeeeever we could be making an infinite loop ourselves, so, let's make sure we are not doing that...
+						callbackCount = oldRepeat;
+					}
+
+					for (let i = 0; i < callbackCount; i++) {
+						this._onRepeatCallback(this._object, this);
+					}
 				}
 
 				this._elapsedTime = 0; // reset the elapsed time
