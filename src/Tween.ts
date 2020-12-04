@@ -624,7 +624,7 @@ export class Tween<Target> {
 		elapsed = Math.min(1, elapsed);
 		elapsed = Math.max(0, elapsed);
 
-		let leftOverTime = currentTime % this._duration; // leftover time
+		let leftOverTime = Number.isFinite(currentTime) ? currentTime % this._duration : currentTime; // leftover time
 		if (Number.isNaN(leftOverTime)) {
 			leftOverTime = 0;
 		}
@@ -688,15 +688,15 @@ export class Tween<Target> {
 				// if we have more loops to go, then go
 				if (this._repeat >= 0) {
 					// update with the leftover time
-					if (leftOverTime > 0) {
+					if (leftOverTime > 0 && Number.isFinite(this._repeat)) {
 						// only if it is greater than 0 and do not emit onupdate events...
 						this._internalUpdate(leftOverTime);
 					}
 					return true;
-				} else {
-					return false;
 				}
 			}
+
+			// If we are here, either we are not a looping boi or we are a finished looping boi
 			if (this._onCompleteCallback) {
 				this._onCompleteCallback(this._object, this);
 			}

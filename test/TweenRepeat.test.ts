@@ -175,7 +175,8 @@ test("Tween with relative + regular repeat", () => {
 test("Tween with really big delta time will loop arround correctly", () => {
 	const o = { a: 0 };
 	const g = new Group();
-	new Tween(o, g).to({ a: 1 }, 100).repeat(10).start().easing(Easing.Linear.None);
+	const fn = jest.fn();
+	new Tween(o, g).to({ a: 1 }, 100).repeat(10).start().easing(Easing.Linear.None).onComplete(fn);
 
 	expect(o.a).toBe(0);
 
@@ -187,8 +188,23 @@ test("Tween with really big delta time will loop arround correctly", () => {
 
 	expect(o.a).toBe(0.5);
 
+	expect(fn).not.toHaveBeenCalled(); // not yet
+
 	g.update(400); // total 1050 but should have capped at 1000
 
 	expect(o.a).toBe(1);
+
+	expect(fn).toHaveBeenCalled(); // now!
+
 	expect(g.getAll()).toHaveLength(0);
+});
+
+test("Tween.end in a neverending repeat shouldn't endless loop", () => {
+	const o = { a: 0 };
+	const g = new Group();
+	const t = new Tween(o, g).to({ a: 1 }, 100).repeat(Infinity).start().easing(Easing.Linear.None);
+	t.end();
+
+	// Silly test but I am not sure how to test for infinite loops
+	expect(1).toBe(1);
 });
