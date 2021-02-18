@@ -15,6 +15,28 @@ test("Tween calls onComplete when finishes", () => {
 	expect(fn).toHaveBeenCalled(); // now!
 });
 
+test("Tween calls onComplete only when the last repeat finishes", () => {
+	const g = new Group();
+	const fn = jest.fn();
+	new Tween({ a: 0 }, g).to({ a: 1 }, 100).repeat(1).start().onComplete(fn);
+
+	g.update(50);
+
+	expect(fn).not.toHaveBeenCalled(); // not yet
+
+	g.update(50);
+
+	expect(fn).not.toHaveBeenCalled(); // not yet
+
+	g.update(50);
+
+	expect(fn).not.toHaveBeenCalled(); // not yet
+
+	g.update(50);
+
+	expect(fn).toHaveBeenCalledTimes(1); // now!
+});
+
 test("Tween calls onUpdate when update is called", () => {
 	const g = new Group();
 	const fn = jest.fn();
