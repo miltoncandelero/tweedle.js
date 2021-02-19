@@ -40,7 +40,7 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.1",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.20.25",
     "typescript": "^4.1.5"
   },
   "scripts": {
@@ -51,6 +51,6 @@
     "types": "tsc ./src/index.ts --emitDeclarationOnly --stripInternal --target es5 -d --outDir ./types && dts-bundle --name tweedle.js --main ./types/index.d.ts --out ../dist/tweedle.d.ts",
     "prepublishOnly": "npm run build",
     "test": "jest",
-    "doc": "rimraf ./docs && typedoc --mode library --out docs src/index.ts --excludeNotExported --excludePrivate --excludeProtected --stripInternal --theme minimal"
+    "doc": "rimraf ./docs && typedoc src/index.ts"
   }
 }
