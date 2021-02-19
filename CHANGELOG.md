@@ -1,3 +1,12 @@
+# 1.1.3
+### Fixes
+- Zero duration tweens were ignoring it's delay due to a faulty `if` condition.
+  - Added some tests for this.
+- Improved documentation on `Tween.delay`. It has no effect after Start is called.
+  - This is a won't fix for #6
+- Removed the badge from the Readme.md
+  - Service dieded.
+
 # 1.1.2
 ### Fixes
 - Tweens fast-forwarding many loops in a single update will call `onLoop` as many times as loops advanced.

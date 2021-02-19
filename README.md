@@ -1,5 +1,6 @@
 # Tweedle.js
-[![NPM](https://nodei.co/npm/tweedle.js.png?compact=true)](https://nodei.co/npm/tweedle.js/)
+`npm i tweedle.js`  
+`yarn add tweedle.js`
 
 ## What is a tween?
 A tween is an easy way to animate something. You tell a property to be at a certain value after so many seconds and look at it go!

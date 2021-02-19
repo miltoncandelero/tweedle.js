@@ -1,4 +1,4 @@
 /**
  * Constant with the hardcoded version of the app
  */
-export const VERSION = "1.1.2";
+export const VERSION = "1.1.3";
