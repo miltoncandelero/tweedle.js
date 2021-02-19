@@ -361,6 +361,24 @@ test("Tween.update can rewind", () => {
 	expect(o.a).toBe(0);
 });
 
+test("Tween delay works when duration is set to 0", () => {
+	const o = { a: 0 };
+	const t = new Tween(o).to({ a: 1 }, 0).start(100).easing(Easing.Linear.None);
+	expect(o.a).toBe(0);
+
+	t.update(50);
+
+	expect(o.a).toBe(0);
+
+	t.update(49);
+
+	expect(o.a).toBe(0);
+
+	t.update(1);
+
+	expect(o.a).toBe(1);
+});
+
 test("Tween delay doesn't break the easing", () => {
 	const o = { a: 0 };
 	const t = new Tween(o).to({ a: 1 }, 100).start(100).easing(Easing.Linear.None);

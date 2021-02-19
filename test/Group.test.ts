@@ -96,7 +96,8 @@ test("Group.update() returns true while tweens are running and false when done",
 	new Tween({}, g).start(2); // will start in 2
 
 	expect(g.update(1)).toBe(true); // one passed
-	expect(g.update(1)).toBe(false); // two passed, tween should start now, duration is zero so it ends immediately
+	expect(g.update(1)).toBe(true); // two passed, tween should start now, duration is zero so it ends immediately however, it updated so it says true.
+	expect(g.update(1)).toBe(false); // now there are no longer any tweens running
 });
 
 test("Tween with no group will use Group.shared", () => {

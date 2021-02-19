@@ -190,7 +190,7 @@ export class Tween<Target> {
 	 * **This function can't overwrite the starting values set by {@link Tween.from}**
 	 *
 	 * You can call this method on a finished tween to restart it without changing the starting values.
-	 * To restart a tween and reset the starting values use {@link Tween.restart()}
+	 * To restart a tween and reset the starting values use {@link Tween.restart}
 	 * @param delay - if given it will be used as the delay in **miliseconds**.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
@@ -407,6 +407,8 @@ export class Tween<Target> {
 	 * Sets the delay for this tween.
 	 *
 	 * This will only be applied at the start of the tween. For delaying the repeating of a tween, see {@link Tween.repeatDelay}
+	 *
+	 * **This will only work before calling {@link Tween.start}.**
 	 * @param amount - the delay for this tween.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
@@ -618,8 +620,15 @@ export class Tween<Target> {
 		}
 
 		elapsed = currentTime / this._duration;
-		// zero duration = instacomplete.
-		elapsed = this._duration == 0 ? 1 : elapsed;
+		// zero duration makes elapsed a NaN. We need to fix this!
+		if (this._duration == 0) {
+			// positive currentTime means we have no delay to wait for!
+			if (currentTime >= 0) {
+				elapsed = 1;
+			} else {
+				elapsed = 0;
+			}
+		}
 		// otherwise, clamp the result
 		elapsed = Math.min(1, elapsed);
 		elapsed = Math.max(0, elapsed);
