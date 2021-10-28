@@ -58,7 +58,7 @@
     "lint:src": "eslint src/**/*.ts --fix && eslint test/**/*.ts --fix",
     "lint:test": "eslint src/**/*.ts --fix && eslint test/**/*.ts --fix",
     "build": "run-s bundle types",
-    "prebuild": "run-s clean",
+    "prebuild": "run-s clean:dist clean:types",
     "clean": "run-p clean:*",
     "clean:dist": "rimraf ./dist",
     "clean:types": "rimraf ./compile",
