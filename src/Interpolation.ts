@@ -1,5 +1,5 @@
 /**
- * An function that takes creates a value by interpolating the elements of the array given.
+ * The type for a function that picks a value by interpolating the elements of the array given.
  */
 export type InterpolationFunction = (v: number[], k: number) => number;
 
@@ -507,6 +507,10 @@ export const Interpolation = {
 	},
 };
 
+/**
+ * ARGB color format
+ * Alpha, Red, Green, Blue.
+ */
 export interface ARGB {
 	a: number;
 	r: number;
@@ -514,6 +518,10 @@ export interface ARGB {
 	b: number;
 }
 
+/**
+ * HSV color format
+ * Alpha, Hue, Saturation, Value.
+ */
 export interface AHSV {
 	a: number;
 	h: number;
@@ -521,6 +529,10 @@ export interface AHSV {
 	v: number;
 }
 
+/**
+ * HCL color format
+ * Alpha, Hue, Chroma, Luminance.
+ */
 export interface AHCL {
 	a: number;
 	h: number;

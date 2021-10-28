@@ -1,3 +1,6 @@
+/**
+ * The type for a function that takes a number between 0 and 1 and returns another number between 0 and 1
+ */
 export type EasingFunction = (amount: number) => number;
 
 /**

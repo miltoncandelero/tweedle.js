@@ -3,5 +3,5 @@
 	"excludePrivate": true,
 	"excludeProtected": true,
 	"excludeInternal": true,
-	"theme": "minimal"
+	"theme": "default"
 }
