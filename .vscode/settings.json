@@ -1,9 +1,7 @@
 {
     "files.exclude": {
-        "**/dist": true,
         "**/node_modules": true,
-        "**/types": true,
-        "**/docs": true
+        "**/docs": true,
     },
     "files.eol": "\n",
     "[typescript]": {

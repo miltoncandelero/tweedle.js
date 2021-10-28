@@ -5,8 +5,7 @@ module.exports = {
         ecmaVersion: "es2020", // Allows for the parsing of modern ECMAScript features
         sourceType: "module", // Allows for the use of imports
         tsconfigRootDir: "./",
-        project: './tsconfig.json',
-
+        project: ['./tsconfig.json', './tsconfig.test.json']
     },
     plugins: [
         '@typescript-eslint',
@@ -16,7 +15,6 @@ module.exports = {
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         "plugin:prettier/recommended",
-        "prettier/@typescript-eslint",
         "plugin:jest/recommended",
         "plugin:jest/style"
     ],

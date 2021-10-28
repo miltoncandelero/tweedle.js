@@ -99,21 +99,46 @@ test("Tween with yoyo repeat", () => {
 
 	expect(o.a).toBe(0);
 
-	t.update(50);
+	t.update(25);
 
-	expect(o.a).toBe(0.5);
+	expect(o.a).toBe(0.25);
 
-	t.update(50);
+	t.update(75);
 
 	expect(o.a).toBe(1);
 
-	t.update(50);
+	t.update(25);
 
-	expect(o.a).toBe(0.5);
+	expect(o.a).toBe(0.75);
 
-	t.update(50);
+	t.update(75);
 
 	expect(o.a).toBe(0);
+});
+
+test("Skipping Tweens with yoyo repeat", () => {
+	const o = { a: 0 };
+	const t = new Tween(o).to({ a: 1 }, 100).start().repeat(2).yoyo(true).easing(Easing.Linear.None);
+
+	expect(o.a).toBe(0);
+
+	t.update(25);
+
+	expect(o.a).toBe(0.25);
+
+	t.update(75);
+
+	expect(o.a).toBe(1);
+
+	t.skip(1);
+
+	t.update(25);
+
+	expect(o.a).toBe(0.25);
+
+	t.update(75);
+
+	expect(o.a).toBe(1);
 });
 
 test("Tween with relative + yoyo repeat", () => {
@@ -190,7 +215,7 @@ test("Tween with really big delta time will loop arround correctly", () => {
 
 	expect(fn).not.toHaveBeenCalled(); // not yet
 
-	g.update(400); // total 1050 but should have capped at 1000
+	g.update(500); // total 1150 but should have capped at 1100
 
 	expect(o.a).toBe(1);
 

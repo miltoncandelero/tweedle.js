@@ -18,24 +18,29 @@ export class Tween<Target> {
 	private _valuesEnd: any = {};
 	private _valuesStartRepeat: any = {};
 	private _duration = 0;
-	private _initialRepeat = 0;
+	private _repeatCount = 0;
 	private _repeat = 0;
 	private _repeatDelayTime?: number;
 	private _yoyo = false;
 	private _isPlaying = false;
-	private _reversed = false;
+	private get _reversed(): boolean {
+		return this.yoyo && this._repeatCount % 2 !== 0;
+	}
 	private _delayTime = 0;
 	private _startTime = 0;
 	private _elapsedTime = 0;
 	private _timescale = 1;
+	private _safetyCheckFunction: (target: Target) => boolean = (_: Target) => true;
 	private _easingFunction: EasingFunction = Easing.Linear.None;
 	private _yoyoEasingFunction: EasingFunction = undefined;
 	private _interpolationFunction: InterpolationFunction = Interpolation.Geom.Linear;
 	private _chainedTweens: Array<Tween<any>> = [];
 	private _onStartCallback?: (object: Target, tweenRef: this) => void;
 	private _onStartCallbackFired = false;
+	private _onAfterDelayCallback?: (object: Target, tweenRef: this) => void;
+	private _onAfterDelayCallbackFired = false;
 	private _onUpdateCallback?: (object: Target, elapsed: number, tweenRef: this) => void;
-	private _onRepeatCallback?: (object: Target, tweenRef: this) => void;
+	private _onRepeatCallback?: (object: Target, repeatCount: number, tweenRef: this) => void;
 	private _onCompleteCallback?: (object: Target, tweenRef: this) => void;
 	private _onStopCallback?: (object: Target, tweenRef: this) => void;
 	private _id = Sequence.nextId();
@@ -205,23 +210,20 @@ export class Tween<Target> {
 
 		this._group.add(this);
 
-		this._repeat = this._initialRepeat;
-
 		if (this._reversed) {
-			// If we were reversed (f.e. using the yoyo feature) then we need to
-			// flip the tween direction back to forward.
-
-			this._reversed = false;
-
 			this._swapEndStartRepeatValues(this._valuesStartRepeat, this._valuesEnd);
 			this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
 		}
+
+		this._repeatCount = 0; // This must be after we check for the _reversed flag!!.
 
 		this._isPlaying = true;
 
 		this._isPaused = false;
 
 		this._onStartCallbackFired = false;
+
+		this._onAfterDelayCallbackFired = false;
 
 		this._isChainStopped = false;
 
@@ -265,6 +267,30 @@ export class Tween<Target> {
 		return this;
 	}
 
+	/**
+	 * @experimental
+	 * Stops the tween and sets the values to the starting ones.
+	 *
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public rewind(): this {
+		if (this._isPlaying) {
+			this.stop();
+		}
+
+		if (this._reversed) {
+			// if you rewind from a reversed position, we unreverse.
+			this._swapEndStartRepeatValues(this._valuesStartRepeat, this._valuesEnd);
+		}
+
+		const value = this._easingFunction(0);
+
+		// properties transformations
+		this._updateProperties(this._object, this._valuesStart, this._valuesEnd, value);
+
+		return this;
+	}
+
 	private _setupProperties(_object: any, _valuesStart: any, _valuesEnd: any, _valuesStartRepeat: any, overwrite: boolean): void {
 		for (const property in _valuesEnd) {
 			const startValue = _object[property];
@@ -275,7 +301,7 @@ export class Tween<Target> {
 			const endValueIsObject = typeof _valuesEnd[property] == "object";
 			const isInterpolationList = !startValueIsArray && Array.isArray(_valuesEnd[property]);
 
-			// If `to()` specifies a property that doesn't exist in the source object,
+			// If to() specifies a property that doesn't exist in the source object,
 			// we should not set that property in the object
 			if (propType == "undefined" || propType == "function" || _valuesEnd[property] == undefined || (!startValueIsArray && !startValueIsNumber && !startValueIsObject)) {
 				continue;
@@ -340,9 +366,40 @@ export class Tween<Target> {
 	 * This will work even on paused tweens.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public end(): this {
+	public end(endChainedTweens: boolean = false): this {
+		let protectedChainedTweens: Tween<any>[] = [];
+
+		if (!endChainedTweens) {
+			protectedChainedTweens = this._chainedTweens;
+			this._chainedTweens = [];
+		}
+
 		this.resume();
 		this.update(Infinity);
+
+		if (!endChainedTweens) {
+			this._chainedTweens = protectedChainedTweens;
+			for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
+				this._chainedTweens[i].start();
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * @experimental
+	 * Skips forward the in the repeats of this tween by triggering a biiiiig update.
+	 * Think of this as a less agressive {@link Tween.end}.
+	 *
+	 * @param amount - The amount of repeats to skip.
+	 * @param resetCurrentLoop - If true, the time will become zero and the object will return to the initial value in the next update.
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public skip(amount: number, resetCurrentLoop: boolean = false): this {
+		this.resume();
+
+		this.update(amount * this._duration - (resetCurrentLoop ? this._elapsedTime : 0));
 
 		return this;
 	}
@@ -381,12 +438,33 @@ export class Tween<Target> {
 	}
 
 	/**
+	 * @experimental
 	 * Stops tweens chained to this tween. To chain a tween see {@link Tween.chain}.
+	 *
 	 * @returns returns this tween for daisy chaining methods.
 	 */
 	public stopChainedTweens(): this {
 		for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
 			this._chainedTweens[i].stop();
+		}
+
+		return this;
+	}
+
+	/**
+	 * @experimental
+	 * Starts all tweens chained to this tween. To chain a tween see {@link Tween.chain}.
+	 *
+	 * @param stopThis - If true, this tween will be stopped before it starts the chained tweens.
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public startChainedTweens(stopThis: boolean = false): this {
+		if (stopThis) {
+			this.stop();
+		}
+
+		for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
+			this._chainedTweens[i].start();
 		}
 
 		return this;
@@ -436,7 +514,6 @@ export class Tween<Target> {
 	 * @returns returns this tween for daisy chaining methods.
 	 */
 	public repeat(times: number = Infinity): this {
-		this._initialRepeat = times;
 		this._repeat = times;
 
 		return this;
@@ -475,6 +552,19 @@ export class Tween<Target> {
 	 */
 	public easing(easingFunction: EasingFunction): this {
 		this._easingFunction = easingFunction;
+
+		return this;
+	}
+
+	/**
+	 * @experimental
+	 * Sets the safety check function to test if the tweening object is still valid.
+	 * If the function returns a non-truthy value, the tween will skip the update loop.
+	 * @param safetyCheckFunction - a function that takes the target object for this tween and returns true if the object is still valid.
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public safetyCheck(safetyCheckFunction: (target: Target) => boolean): this {
+		this._safetyCheckFunction = safetyCheckFunction;
 
 		return this;
 	}
@@ -520,12 +610,23 @@ export class Tween<Target> {
 	}
 
 	/**
-	 * Sets the onStart callback
+	 * Sets the onStart callback. This will be called as soon as you call {@link Tween.start}.
 	 * @param callback - the function to call on start. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
 	public onStart(callback: (object: Target, tween: this) => void): this {
 		this._onStartCallback = callback;
+
+		return this;
+	}
+
+	/**
+	 * Sets the onAfterDelay callback. This will be called when the delay is over.
+	 * @param callback - the function to call on start. It will recieve the target object and this tween as a parameter.
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public onAfterDelay(callback: (object: Target, tween: this) => void): this {
+		this._onAfterDelayCallback = callback;
 
 		return this;
 	}
@@ -546,7 +647,7 @@ export class Tween<Target> {
 	 * @param callback - the function to call on repeat. It will recieve the target object and this tween as a parameter.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public onRepeat(callback: (object: Target, tween: this) => void): this {
+	public onRepeat(callback: (object: Target, repeatCount: number, tweenRef: this) => void): this {
 		this._onRepeatCallback = callback;
 
 		return this;
@@ -589,6 +690,10 @@ export class Tween<Target> {
 	}
 
 	private _internalUpdate(deltaTime: number): boolean {
+		if (!this._safetyCheckFunction(this._object)) {
+			return false;
+		}
+
 		if (this._isPaused) {
 			return false;
 		}
@@ -619,6 +724,14 @@ export class Tween<Target> {
 			this._onStartCallbackFired = true;
 		}
 
+		if (this._onAfterDelayCallbackFired == false && currentTime >= 0) {
+			if (this._onAfterDelayCallback) {
+				this._onAfterDelayCallback(this._object, this);
+			}
+
+			this._onAfterDelayCallbackFired = true;
+		}
+
 		elapsed = currentTime / this._duration;
 		// zero duration makes elapsed a NaN. We need to fix this!
 		if (this._duration == 0) {
@@ -637,7 +750,7 @@ export class Tween<Target> {
 		if (Number.isNaN(leftOverTime)) {
 			leftOverTime = 0;
 		}
-		const loopsMade = Math.round(currentTime / this._duration); // if we overloop, how many loops did we eat?
+		const loopsMade = Math.floor(currentTime / this._duration); // if we overloop, how many loops did we eat?
 
 		// check which easing to use...
 		let value: number;
@@ -651,21 +764,17 @@ export class Tween<Target> {
 		this._updateProperties(this._object, this._valuesStart, this._valuesEnd, value);
 
 		// if there is absolutely no chance to loop, call update. we will be done.
-		if (this._onUpdateCallback && (elapsed != 1 || this._repeat <= 0)) {
+		if (this._onUpdateCallback && (elapsed != 1 || this._repeat - this._repeatCount <= 0)) {
 			this._onUpdateCallback(this._object, elapsed, this);
 		}
 
 		if (elapsed == 1) {
-			if (this._repeat > 0) {
-				// store how many repeats we had for calling multiple repeats
-				const oldRepeat = this._repeat;
+			if (this._repeat - this._repeatCount > 0) {
+				// increase loops
+				const oldCount = this._repeatCount;
+				this._repeatCount = Math.min(this._repeat + 1, this._repeatCount + loopsMade);
 
-				// substract loops
-				if (isFinite(this._repeat)) {
-					this._repeat -= loopsMade;
-				}
-
-				if (this._onUpdateCallback && (this._repeat < 0 || leftOverTime <= 0)) {
+				if (this._onUpdateCallback && (this._repeat - this._repeatCount < 0 || leftOverTime <= 0)) {
 					this._onUpdateCallback(this._object, elapsed, this);
 				}
 
@@ -679,11 +788,6 @@ export class Tween<Target> {
 				// Reassign starting values
 				this._valuesStart = JSON.parse(JSON.stringify(this._valuesStartRepeat));
 
-				// store yoyo state
-				if (this._yoyo) {
-					this._reversed = !this._reversed;
-				}
-
 				// restart start time
 				if (this._repeatDelayTime !== undefined) {
 					this._startTime = -this._repeatDelayTime;
@@ -692,26 +796,26 @@ export class Tween<Target> {
 				}
 
 				if (this._onRepeatCallback) {
-					// ok, by default call once the repeat callback.
-					let callbackCount = 1;
+					// We fallback to only one call.
+					let callbackCount: number = 1;
+
 					if (Number.isFinite(loopsMade)) {
 						// if we have a logical number of loops, we trigger the callback that many times
-						callbackCount = loopsMade;
-					} else if (Number.isFinite(oldRepeat)) {
-						// if we didn't have a logical number on the loops made, it means that we substracted infinite amount of loops from the current loop.
-						// howeeeever we could be making an infinite loop ourselves, so, let's make sure we are not doing that...
-						callbackCount = oldRepeat;
+						callbackCount = this._repeatCount - oldCount;
+					} else if (Number.isFinite(this._repeat)) {
+						// if the amount of loops is infinite, we trigger the callback the amount of loops remaining
+						callbackCount = this._repeat - oldCount;
 					}
 
 					for (let i = 0; i < callbackCount; i++) {
-						this._onRepeatCallback(this._object, this);
+						this._onRepeatCallback(this._object, oldCount + 1 + i, this);
 					}
 				}
 
 				this._elapsedTime = 0; // reset the elapsed time
 
 				// if we have more loops to go, then go
-				if (this._repeat >= 0) {
+				if (this._repeat - this._repeatCount >= 0) {
 					// update with the leftover time
 					if (leftOverTime > 0 && Number.isFinite(this._repeat)) {
 						// only if it is greater than 0 and do not emit onupdate events...
@@ -728,7 +832,7 @@ export class Tween<Target> {
 
 			for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
 				// Make the chained tweens start exactly at the time they should,
-				// even if the `update()` method was called way past the duration of the tween
+				// even if the update method was called way past the duration of the tween
 				this._chainedTweens[i].start();
 				if (leftOverTime > 0) {
 					this._chainedTweens[i].update(leftOverTime);
@@ -766,7 +870,7 @@ export class Tween<Target> {
 				this._updateProperties(_object[property], start, end, value);
 			} else {
 				// Parses relative end values with start as base (e.g.: +10, -3)
-				end = this._handleRelativeValue(start, end as number | string);
+				end = this._handleRelativeValue(start as number, end as number | string);
 
 				// Protect against non numeric properties.
 				if (typeof end == "number" && (typeof start == "number" || typeof start == "string")) {
@@ -827,7 +931,7 @@ export class Tween<Target> {
 /**
  * A recursive version of Typescript's Partial<> decorator.
  */
-type RecursivePartial<T> = {
+export type RecursivePartial<T> = {
 	[P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : RecursivePartial<T[P]>;
 };
 export default Tween;

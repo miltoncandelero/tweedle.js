@@ -440,3 +440,31 @@ test("Tween chain() works", () => {
 	expect(o2.a).toBe(1);
 	expect(o3.a).toBe(0.5);
 });
+
+test("Tween end(true) ends all chained tweens", () => {
+	const o1 = { a: 0 };
+	const o2 = { a: 0 };
+	const o3 = { a: 0 };
+
+	const t3 = new Tween(o3).to({ a: 1 }, 100);
+	const t2 = new Tween(o2).to({ a: 1 }, 100).chain(t3);
+	new Tween(o1).to({ a: 1 }, 100).start().chain(t2).end(true);
+
+	expect(o1.a).toBe(1);
+	expect(o2.a).toBe(1);
+	expect(o3.a).toBe(1);
+});
+
+test("Tween end() doesn't ends all chained tweens", () => {
+	const o1 = { a: 0 };
+	const o2 = { a: 0 };
+	const o3 = { a: 0 };
+
+	const t3 = new Tween(o3).to({ a: 1 }, 100);
+	const t2 = new Tween(o2).to({ a: 1 }, 100).chain(t3);
+	new Tween(o1).to({ a: 1 }, 100).start().chain(t2).end();
+
+	expect(o1.a).toBe(1);
+	expect(o2.a).toBe(0);
+	expect(o3.a).toBe(0);
+});

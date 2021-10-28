@@ -507,21 +507,21 @@ export const Interpolation = {
 	},
 };
 
-interface ARGB {
+export interface ARGB {
 	a: number;
 	r: number;
 	g: number;
 	b: number;
 }
 
-interface AHSV {
+export interface AHSV {
 	a: number;
 	h: number;
 	s: number;
 	v: number;
 }
 
-interface AHCL {
+export interface AHCL {
 	a: number;
 	h: number;
 	c: number;

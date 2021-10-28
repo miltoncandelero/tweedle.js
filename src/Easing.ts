@@ -10,6 +10,11 @@ export type EasingFunction = (amount: number) => number;
  * Need help picking one? [Check this out!](https://easings.net/)
  */
 export const Easing = {
+	Step: {
+		None(amount: number): number {
+			return amount < 0.5 ? 0 : 1;
+		},
+	},
 	Linear: {
 		None(amount: number): number {
 			return amount;

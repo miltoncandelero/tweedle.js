@@ -1,3 +1,21 @@
+# 2.0.0
+### Changes
+- Migrated from Microbundle to Rollup
+- Migrated from dts-gen to api-extractor
+- Renamed iife to umd
+
+### Features
+- Added `onAfterDelay` #5
+- Added `rewind` 
+- `onRepeat` now reports the loop number. #4
+- Added `skip`
+- Added `startChainedTweens` #2
+- `end` now allows to not end the chained tweens #2
+- Added `Easing.Step.None` #7
+
+### Fixes
+- Rare case where overlooping (more than one repeat loop inside a single update call) would skip a loop.
+
 # 1.1.3
 ### Fixes
 - Zero duration tweens were ignoring it's delay due to a faulty `if` condition.
