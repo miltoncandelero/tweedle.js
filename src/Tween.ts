@@ -325,7 +325,7 @@ export class Tween<Target> {
 
 				if (typeof _valuesStartRepeat[property] == "undefined" || overwrite) {
 					if (isInterpolationList) {
-						_valuesStartRepeat[property] = _valuesEnd[property].slice().reverse();
+						_valuesStartRepeat[property] = _valuesEnd[property].slice().reverse()[0];
 					} else {
 						_valuesStartRepeat[property] = _valuesStart[property] || 0;
 					}
@@ -900,17 +900,23 @@ export class Tween<Target> {
 
 	private _swapEndStartRepeatValues(_valuesStartRepeat: any, _valuesEnd: any): void {
 		for (const property in _valuesStartRepeat) {
+			const isInterpolationList = !Array.isArray(_valuesStartRepeat[property]) && Array.isArray(_valuesEnd[property]);
+
 			if (typeof _valuesStartRepeat[property] == "object") {
 				this._swapEndStartRepeatValues(_valuesStartRepeat[property], _valuesEnd[property]);
 			} else {
 				const tmp = _valuesStartRepeat[property];
 				if (typeof _valuesEnd[property] == "string") {
 					_valuesStartRepeat[property] = Number(_valuesStartRepeat[property]) + Number(_valuesEnd[property]);
+					_valuesEnd[property] = tmp;
+				} else if (isInterpolationList) {
+					const aux = _valuesEnd[property].slice().reverse();
+					_valuesStartRepeat[property] = aux[0];
+					_valuesEnd[property] = aux;
 				} else {
 					_valuesStartRepeat[property] = _valuesEnd[property];
+					_valuesEnd[property] = tmp;
 				}
-
-				_valuesEnd[property] = tmp;
 			}
 		}
 	}

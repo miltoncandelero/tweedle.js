@@ -245,3 +245,43 @@ test("Tween.end in a repeating tween should call all the onRepeat", () => {
 	expect(complete).toHaveBeenCalledTimes(1);
 	expect(repeat).toHaveBeenCalledTimes(10);
 });
+
+test("Tween with interpolated properties with regular repeat", () => {
+	const o = { x: 0.0 };
+	const g = new Group();
+	const t = new Tween(o, g);
+
+	t.to({ x: [1, 2, 3] }, 1000).repeat(2);
+
+	t.start();
+
+	expect(t.isPaused()).toBe(false);
+
+	g.update(500);
+
+	expect(o.x).toBe(1.5);
+
+	g.update(500);
+
+	expect(o.x).toBe(3);
+
+	g.update(500);
+
+	expect(o.x).toBe(2.5);
+
+	g.update(500);
+
+	expect(o.x).toBe(3);
+
+	g.update(500);
+
+	expect(o.x).toBe(1.5);
+
+	g.update(500);
+
+	expect(o.x).toBe(3);
+
+	g.update(500);
+
+	expect(o.x).toBe(3);
+});
