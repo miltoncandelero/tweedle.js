@@ -1,14 +1,14 @@
 # Tweedle.js
 `npm i tweedle.js`  
-`yarn add tweedle.js`
 
 ## What is a tween?
 A tween is an easy way to animate something. You tell a property to be at a certain value after so many seconds and look at it go!
 
 ## [API documentation](https://miltoncandelero.github.io/tweedle.js/)
+## [Source code](https://github.com/miltoncandelero/tweedle.js)
 
 ## How do I use this?
-If you are on the browser, use the `iife` package and use the global `TWEEDLE` to find what you need. If you are using npm you can import just what you need (we also have typescript support out of the box).  
+If you are on the browser, use the `umd` package and use the global `TWEEDLE` to find what you need (or the `es` modules if you understand that kind of black magic). If you are using npm you can import just what you need (we also have typescript support out of the box).  
 The overall syntax is this:
 ```js
 const myObject = { x:0, y:0 };

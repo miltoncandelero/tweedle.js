@@ -1,3 +1,11 @@
+# 2.0.1
+### Changes
+- Updated deps
+- Fixed #13 (it... fixed itself?)
+- Fixed #14
+  - Added tests for Beziers
+- Updated readme
+
 # 2.0.0
 ### Changes
 - Migrated from Microbundle to Rollup
