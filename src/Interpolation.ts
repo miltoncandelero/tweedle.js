@@ -58,6 +58,11 @@ export const Interpolation = {
 		QuadraticBezier(v: number[], k: number): number {
 			let b = 0;
 			const n = v.length - 1;
+
+			if (k == 1) {
+				return v[n];
+			}
+
 			const pw = Math.pow;
 			const bn = Interpolation.Utils.Bernstein;
 
@@ -82,6 +87,11 @@ export const Interpolation = {
 		CubicBezier(v: number[], k: number): number {
 			let b = 0;
 			const n = v.length - 1;
+
+			if (k == 1) {
+				return v[n];
+			}
+
 			const pw = Math.pow;
 			const bn = Interpolation.Utils.Bernstein;
 
