@@ -9,16 +9,16 @@ import pkg from './package.json' assert { type: 'json' };
 const projectFolder = process.cwd();
 
 const plugins = [
+	sucrase({
+		include: ["**/*.ts"],
+		transforms: ['typescript']
+	}),
 	sourcemaps(),
 	nodeResolve({
 		browser: true,
 		preferBuiltins: false,
 	}),
 	commonjs({}),
-	sucrase({
-		include: ["**/*.ts"],
-		transforms: ['typescript']
-	})
 ];
 
 const compiled = (new Date()).toUTCString().replace(/GMT/g, 'UTC');
