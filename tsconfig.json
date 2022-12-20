@@ -18,6 +18,7 @@
 		"module": "ESNext",
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
+		"importsNotUsedAsValues": "error",
 	},
 	"exclude": [
 		"node_modules",

@@ -1,14 +1,12 @@
-const path = require('path');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const sourcemaps = require('rollup-plugin-sourcemaps');
-const sucrase = require('@rollup/plugin-sucrase');
-const commonjs = require('@rollup/plugin-commonjs');
-const { terser } = require('rollup-plugin-terser');
+import path from 'path';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+import sucrase from '@rollup/plugin-sucrase';
+import commonjs from '@rollup/plugin-commonjs';
+import { terser } from 'rollup-plugin-terser';
+import pkg from './package.json' assert { type: 'json' };
 
 const projectFolder = process.cwd();
-
-const pkg = require("./package.json");
-
 
 const plugins = [
 	sourcemaps(),
