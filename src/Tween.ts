@@ -1,7 +1,8 @@
-import { Easing, EasingFunction } from "./Easing";
-import { Interpolation, InterpolationFunction } from "./Interpolation";
+import type { Easing, EasingFunction } from "./Easing";
+import type { Interpolation, InterpolationFunction } from "./Interpolation";
 import { Group } from "./Group";
 import { Sequence } from "./Sequence";
+import { DEFAULTS } from "./Defaults";
 
 /**
  * A Tween is basically an animation command.
@@ -30,10 +31,10 @@ export class Tween<Target> {
 	private _startTime = 0;
 	private _elapsedTime = 0;
 	private _timescale = 1;
-	private _safetyCheckFunction: (target: Target) => boolean = (_: Target) => true;
-	private _easingFunction: EasingFunction = Easing.Linear.None;
-	private _yoyoEasingFunction: EasingFunction = undefined;
-	private _interpolationFunction: InterpolationFunction = Interpolation.Geom.Linear;
+	private _safetyCheckFunction: (target: Target) => boolean = DEFAULTS.safetyCheckFunction;
+	private _easingFunction: EasingFunction = DEFAULTS.easingFunction;
+	private _yoyoEasingFunction: EasingFunction = DEFAULTS.yoyoEasingFunction;
+	private _interpolationFunction: InterpolationFunction = DEFAULTS.interpolationFunction;
 	private _chainedTweens: Array<Tween<any>> = [];
 	private _onStartCallback?: (object: Target, tweenRef: this) => void;
 	private _onStartCallbackFired = false;
