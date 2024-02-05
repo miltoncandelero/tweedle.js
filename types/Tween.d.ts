@@ -278,6 +278,12 @@ export declare class Tween<Target> {
      */
     onStop(callback: (object: Target, tween: this) => void): this;
     /**
+     * Sets the onFinally callback
+     * @param callback - the function to call on stop, complete or after safety check failed. It will recieve the target object and this tween as a parameter.
+     * @returns returns this tween for daisy chaining methods.
+     */
+    onFinally(callback: (object: Target, tween: this) => void): this;
+    /**
      * Updates this tween
      * @param deltaTime - the amount of time that passed since last update in **miliseconds**
      * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens from their group.

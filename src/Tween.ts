@@ -31,7 +31,7 @@ export class Tween<Target> {
 	private _startTime = 0;
 	private _elapsedTime = 0;
 	private _timescale = 1;
-	private _safetyCheckFunction: (target: Target) => boolean = DEFAULTS.safetyCheckFunction;
+	private _safetyCheckFunction: (target: Target, tweenRef: this) => boolean = DEFAULTS.safetyCheckFunction;
 	private _easingFunction: EasingFunction = DEFAULTS.easingFunction;
 	private _yoyoEasingFunction: EasingFunction = DEFAULTS.yoyoEasingFunction;
 	private _interpolationFunction: InterpolationFunction = DEFAULTS.interpolationFunction;
@@ -44,6 +44,7 @@ export class Tween<Target> {
 	private _onRepeatCallback?: (object: Target, repeatCount: number, tweenRef: this) => void;
 	private _onCompleteCallback?: (object: Target, tweenRef: this) => void;
 	private _onStopCallback?: (object: Target, tweenRef: this) => void;
+	private _onFinallyCallback?: (object: Target, tweenRef: this) => void;
 	private _id = Sequence.nextId();
 	private _isChainStopped = false;
 	private _object: Target;
@@ -359,6 +360,10 @@ export class Tween<Target> {
 			this._onStopCallback(this._object, this);
 		}
 
+		if (this._onFinallyCallback) {
+			this._onFinallyCallback(this._object, this);
+		}
+
 		return this;
 	}
 
@@ -561,10 +566,10 @@ export class Tween<Target> {
 	 * @experimental
 	 * Sets the safety check function to test if the tweening object is still valid.
 	 * If the function returns a non-truthy value, the tween will skip the update loop.
-	 * @param safetyCheckFunction - a function that takes the target object for this tween and returns true if the object is still valid.
+	 * @param safetyCheckFunction - a function that takes the target object and this tween as a parameter and returns true if the object is still valid.
 	 * @returns returns this tween for daisy chaining methods.
 	 */
-	public safetyCheck(safetyCheckFunction: (target: Target) => boolean): this {
+	public safetyCheck(safetyCheckFunction: (target: Target, tween: this) => boolean): this {
 		this._safetyCheckFunction = safetyCheckFunction;
 
 		return this;
@@ -677,6 +682,17 @@ export class Tween<Target> {
 	}
 
 	/**
+	 * Sets the onFinally callback
+	 * @param callback - the function to call on stop, complete or after safety check failed. It will recieve the target object and this tween as a parameter.
+	 * @returns returns this tween for daisy chaining methods.
+	 */
+	public onFinally(callback: (object: Target, tween: this) => void): this {
+		this._onFinallyCallback = callback;
+
+		return this;
+	}
+
+	/**
 	 * Updates this tween
 	 * @param deltaTime - the amount of time that passed since last update in **miliseconds**
 	 * @param preserve - Prevent the removal of stopped, paused, finished or non started tweens from their group.
@@ -691,7 +707,11 @@ export class Tween<Target> {
 	}
 
 	private _internalUpdate(deltaTime: number): boolean {
-		if (!this._safetyCheckFunction(this._object)) {
+		if (!this._safetyCheckFunction(this._object, this)) {
+			if (this._onFinallyCallback) {
+				this._onFinallyCallback(this._object, this);
+			}
+
 			return false;
 		}
 
@@ -829,6 +849,10 @@ export class Tween<Target> {
 			// If we are here, either we are not a looping boi or we are a finished looping boi
 			if (this._onCompleteCallback) {
 				this._onCompleteCallback(this._object, this);
+			}
+
+			if (this._onFinallyCallback) {
+				this._onFinallyCallback(this._object, this);
 			}
 
 			for (let i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {

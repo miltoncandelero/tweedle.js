@@ -1,8 +1,9 @@
 import { EasingFunction, Easing } from "./Easing";
 import { InterpolationFunction, Interpolation } from "./Interpolation";
+import type Tween from "./Tween";
 
 export interface IDefaultValues {
-	safetyCheckFunction: (target: unknown) => boolean;
+	safetyCheckFunction: (target: unknown, tween: Tween<unknown>) => boolean;
 	easingFunction: EasingFunction;
 	yoyoEasingFunction: EasingFunction | undefined;
 	interpolationFunction: InterpolationFunction;
