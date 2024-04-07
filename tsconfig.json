@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"target": "es6",
+		"target": "es2020",
 		"moduleResolution": "node",
 		"removeComments": true,
 		"sourceMap": true,
@@ -18,7 +18,7 @@
 		"module": "ESNext",
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
-		"importsNotUsedAsValues": "error",
+		"verbatimModuleSyntax": true,
 	},
 	"exclude": [
 		"node_modules",

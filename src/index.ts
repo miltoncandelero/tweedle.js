@@ -9,3 +9,4 @@ export type { RecursivePartial } from "./Tween";
 export { VERSION } from "./Version";
 export { DEFAULTS } from "./Defaults";
 export type { IDefaultValues } from "./Defaults";
+export type { IUpdateable } from "./IUpdateable";

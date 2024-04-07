@@ -1,8 +1,10 @@
-import type { Easing, EasingFunction } from "./Easing";
-import type { Interpolation, InterpolationFunction } from "./Interpolation";
+import type { EasingFunction } from "./Easing";
+import type { InterpolationFunction } from "./Interpolation";
 import { Group } from "./Group";
 import { Sequence } from "./Sequence";
 import { DEFAULTS } from "./Defaults";
+import type { IUpdateable } from "./IUpdateable";
+import type { RecursivePartial } from "./RecursivePartial";
 
 /**
  * A Tween is basically an animation command.
@@ -13,9 +15,9 @@ import { DEFAULTS } from "./Defaults";
  * Most methods will return the same object to allow for daisy chaining.
  * @template Target of the tween
  */
-export class Tween<Target> {
+export class Tween<Target> implements IUpdateable {
 	private _isPaused = false;
-	private _valuesStart: any = {};
+	private _valuesStart: unknown = {};
 	private _valuesEnd: any = {};
 	private _valuesStartRepeat: any = {};
 	private _duration = 0;
@@ -934,11 +936,3 @@ export class Tween<Target> {
 		}
 	}
 }
-
-/**
- * A recursive version of Typescript's Partial<> decorator.
- */
-export type RecursivePartial<T> = {
-	[P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : RecursivePartial<T[P]>;
-};
-export default Tween;

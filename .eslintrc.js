@@ -44,6 +44,8 @@ module.exports = {
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/unbound-method": "off",
         "prettier/prettier": "warn",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/consistent-type-imports": "error"
     },
 
 };

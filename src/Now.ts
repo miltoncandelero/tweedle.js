@@ -7,10 +7,8 @@ export let NOW: () => number;
 // Include a performance.now polyfill.
 // In node.js, use process.hrtime.
 
-// @ts-ignore
 if (typeof self == "undefined" && typeof process !== "undefined" && process.hrtime) {
 	NOW = function (): number {
-		// @ts-ignore
 		const time = process.hrtime();
 
 		// Convert [seconds, nanoseconds] to milliseconds.
