@@ -1,4 +1,3 @@
-// TODO: Time based frequency setter
 // TODO: Fix all comments
 // TODO: Caffeine (AKA never sleep) flag
 // TODO: Setters for the threshold and substep time
@@ -24,7 +23,7 @@ export class Spring<Target> implements IUpdateable {
 	private _delayTime = 0;
 	private _elapsedTime = 0;
 	private _timescale = 1;
-	private _angularFrequency = 1;
+	private _frequency = 1;
 	private _damping = 1;
 	private _safetyCheckFunction: (target: Target) => boolean = DEFAULTS.safetyCheckFunction;
 	private _onAwakeCallback?: (object: Target, springRef: this) => void;
@@ -37,7 +36,7 @@ export class Spring<Target> implements IUpdateable {
 	private _id = Sequence.nextId();
 	private _object: Target;
 	private _groupRef: Group;
-	private _substepTime: number = 17; // substep slightly less than 60fps
+	private _substepTime: number = Infinity; // substep slightly less than 60fps
 	private _sleepThreshold: number = 0.01; // 10th of a pixel
 	private get _group(): Group {
 		if (this._groupRef) {
@@ -84,8 +83,8 @@ export class Spring<Target> implements IUpdateable {
 		return this._timescale;
 	}
 
-	public getAngularFrequency(): number {
-		return this._angularFrequency;
+	public getFrequency(): number {
+		return this._frequency;
 	}
 
 	public getDamping(): number {
@@ -112,19 +111,19 @@ export class Spring<Target> implements IUpdateable {
 	 * @param duration - if given it will be used as the duration in **miliseconds**. if not, a call to {@link Tween.duration} will be needed.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public to(properties: RecursivePartial<Target>, angularFrequency?: number, damping?: number): this;
-	public to(properties: any, angularFrequency?: number, damping?: number): this;
-	public to(properties: any, angularFrequency?: number, damping?: number): this {
+	public to(properties: RecursivePartial<Target>, period?: number, damping?: number): this;
+	public to(properties: any, period?: number, damping?: number): this;
+	public to(properties: any, period?: number, damping?: number): this {
 		try {
 			this._valuesEnd = JSON.parse(JSON.stringify(properties));
 		} catch (e) {
 			// recursive object. this gonna crash!
 			console.warn("The object you provided to the to() method has a circular reference!. It can't be cloned. Falling back to dynamic targeting");
-			return this.dynamicTo(properties, angularFrequency, damping);
+			return this.dynamicTo(properties, period, damping);
 		}
 
-		if (angularFrequency !== undefined) {
-			this._angularFrequency = angularFrequency;
+		if (period !== undefined) {
+			this._frequency = 1 / period;
 		}
 
 		if (damping !== undefined) {
@@ -142,13 +141,13 @@ export class Spring<Target> implements IUpdateable {
 	 * @param duration - if given it will be used as the duration in **miliseconds**. if not, a call to {@link Tween.duration} will be needed.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public dynamicTo(properties: RecursivePartial<Target>, angularFrequency?: number, damping?: number): this;
-	public dynamicTo(properties: any, angularFrequency?: number, damping?: number): this;
-	public dynamicTo(properties: any, angularFrequency?: number, damping?: number): this {
+	public dynamicTo(properties: RecursivePartial<Target>, period?: number, damping?: number): this;
+	public dynamicTo(properties: any, period?: number, damping?: number): this;
+	public dynamicTo(properties: any, period?: number, damping?: number): this {
 		this._valuesEnd = properties; // JSON.parse(JSON.stringify(properties));
 
-		if (angularFrequency !== undefined) {
-			this._angularFrequency = angularFrequency;
+		if (period !== undefined) {
+			this._frequency = 1 / period;
 		}
 
 		if (damping !== undefined) {
@@ -158,9 +157,14 @@ export class Spring<Target> implements IUpdateable {
 		return this;
 	}
 
-	public angularFrequency(angularFrequency: number): this {
-		this._angularFrequency = angularFrequency;
+	public frequency(frequency: number): this {
+		this._frequency = frequency;
 
+		return this;
+	}
+
+	public period(period: number): this {
+		this._frequency = 1 / period;
 		return this;
 	}
 
@@ -421,7 +425,7 @@ export class Spring<Target> implements IUpdateable {
 			return false;
 		}
 
-		const w = this._angularFrequency * 2 * Math.PI;
+		const w = this._frequency * 2 * Math.PI;
 
 		// No strenght means no spring. Just follow the last velocity forever.
 		if (w < Number.EPSILON) {
@@ -453,7 +457,7 @@ export class Spring<Target> implements IUpdateable {
 			inOut.value = target + e1 * c1 + e2 * c2;
 			inOut.rate = e1 * c1 * a1 + e2 * c2 * a2;
 		} else if (this._damping < 1) {
-			const wd = w * Math.sqrt(this._damping * this._damping - 1);
+			const wd = w * Math.sqrt(1 - this._damping * this._damping);
 			const a = err;
 			const b = (inOut.rate + err * (this._damping * w)) / wd;
 			const s = Math.sin(wd * deltaTime);
