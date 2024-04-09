@@ -1,3 +1,8 @@
+// TODO: Remove preserve from groups
+// TODO: Allow groups to have groups
+// TODO: Add preserve so a group can preserve itself
+// TODO: Add destroy method
+// TODO: Add IsDestroyed and OnDestroy
 import type { IUpdateable } from "./IUpdateable";
 import { NOW } from "./Now";
 import { Sequence } from "./Sequence";

@@ -1,6 +1,6 @@
 // TODO: Fix all comments
-// TODO: Caffeine (AKA never sleep) flag
-// TODO: Setters for the threshold and substep time
+// TODO: Introduce "isDestroyed" property
+// TODO: Introduce "OnDestroy" callback
 import { Group } from "./Group";
 import { Sequence } from "./Sequence";
 import { DEFAULTS } from "./Defaults";
@@ -18,6 +18,7 @@ import type { RecursivePartial } from ".";
  */
 export class Spring<Target> implements IUpdateable {
 	private _isAwake = false;
+	private _isActive = false;
 	private _valuesChangeRate: unknown = {};
 	private _valuesEnd: any = {};
 	private _delayTime = 0;
@@ -27,7 +28,8 @@ export class Spring<Target> implements IUpdateable {
 	private _damping = 1;
 	private _safetyCheckFunction: (target: Target) => boolean = DEFAULTS.safetyCheckFunction;
 	private _onAwakeCallback?: (object: Target, springRef: this) => void;
-	private _onAwakeCallbackFired = false;
+	private _onActivateCallbackFired = false;
+	private _onActivateCallback?: (object: Target, springRef: this) => void;
 	private _onAfterDelayCallback?: (object: Target, springRef: this) => void;
 	private _onAfterDelayCallbackFired = false;
 	private _onUpdateCallback?: (object: Target, springRef: this) => void;
@@ -36,8 +38,8 @@ export class Spring<Target> implements IUpdateable {
 	private _id = Sequence.nextId();
 	private _object: Target;
 	private _groupRef: Group;
-	private _substepTime: number = Infinity; // substep slightly less than 60fps
 	private _sleepThreshold: number = 0.01; // 10th of a pixel
+	private _preserveAfterSleep: boolean = false;
 	private get _group(): Group {
 		if (this._groupRef) {
 			return this._groupRef;
@@ -91,6 +93,12 @@ export class Spring<Target> implements IUpdateable {
 		return this._damping;
 	}
 
+	public getSleepThreshold(): number {
+		return this._sleepThreshold;
+	}
+	public getPreserve(): boolean {
+		return this._preserveAfterSleep;
+	}
 	/**
 	 * A tween is playing when it has been started but hasn't ended yet. This has nothing to do with pausing. For that see {@link Tween.isPaused}.
 	 * @returns returns true if this spring is playing.
@@ -111,17 +119,19 @@ export class Spring<Target> implements IUpdateable {
 	 * @param duration - if given it will be used as the duration in **miliseconds**. if not, a call to {@link Tween.duration} will be needed.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public to(properties: RecursivePartial<Target>, period?: number, damping?: number): this;
-	public to(properties: any, period?: number, damping?: number): this;
-	public to(properties: any, period?: number, damping?: number): this {
+	public to(properties: RecursivePartial<Target>, period?: number, damping?: number, resetSpeed?: boolean): this;
+	public to(properties: any, period?: number, damping?: number, resetSpeed?: boolean): this;
+	public to(properties: any, period?: number, damping?: number, resetSpeed?: boolean): this {
 		try {
 			this._valuesEnd = JSON.parse(JSON.stringify(properties));
 		} catch (e) {
 			// recursive object. this gonna crash!
 			console.warn("The object you provided to the to() method has a circular reference!. It can't be cloned. Falling back to dynamic targeting");
-			return this.dynamicTo(properties, period, damping);
+			return this.dynamicTo(properties, period, damping, resetSpeed);
 		}
-
+		if (resetSpeed) {
+			this._valuesChangeRate = {};
+		}
 		if (period !== undefined) {
 			this._frequency = 1 / period;
 		}
@@ -141,15 +151,18 @@ export class Spring<Target> implements IUpdateable {
 	 * @param duration - if given it will be used as the duration in **miliseconds**. if not, a call to {@link Tween.duration} will be needed.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public dynamicTo(properties: RecursivePartial<Target>, period?: number, damping?: number): this;
-	public dynamicTo(properties: any, period?: number, damping?: number): this;
-	public dynamicTo(properties: any, period?: number, damping?: number): this {
+	public dynamicTo(properties: RecursivePartial<Target>, period?: number, damping?: number, resetSpeed?: boolean): this;
+	public dynamicTo(properties: any, period?: number, damping?: number, resetSpeed?: boolean): this;
+	public dynamicTo(properties: any, period?: number, damping?: number, resetSpeed?: boolean): this {
 		this._valuesEnd = properties; // JSON.parse(JSON.stringify(properties));
 
 		if (period !== undefined) {
 			this._frequency = 1 / period;
 		}
 
+		if (resetSpeed) {
+			this._valuesChangeRate = {};
+		}
 		if (damping !== undefined) {
 			this._damping = damping;
 		}
@@ -173,7 +186,15 @@ export class Spring<Target> implements IUpdateable {
 
 		return this;
 	}
+	public sleepThreshold(value: number): this {
+		this._sleepThreshold = value;
+		return this;
+	}
 
+	public preserve(preserve: boolean): this {
+		this._preserveAfterSleep = preserve;
+		return this;
+	}
 	/**
 	 * Tweens won't start by themselves when created. Call this to start the tween.
 	 * Starting values for the animation will be stored at this moment.
@@ -185,8 +206,8 @@ export class Spring<Target> implements IUpdateable {
 	 * @param delay - if given it will be used as the delay in **miliseconds**.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public awake(delay?: number): this {
-		if (this._isAwake) {
+	public activate(delay?: number): this {
+		if (this._isActive) {
 			return this;
 		}
 
@@ -198,7 +219,7 @@ export class Spring<Target> implements IUpdateable {
 
 		this._isAwake = true;
 
-		this._onAwakeCallbackFired = false;
+		this._onActivateCallbackFired = false;
 
 		this._onAfterDelayCallbackFired = false;
 
@@ -212,13 +233,13 @@ export class Spring<Target> implements IUpdateable {
 	 * @returns returns this spring for daisy chaining methods.
 	 */
 	public stop(): this {
-		if (!this._isAwake) {
+		if (!this._isActive) {
 			return this;
 		}
 
 		this._group.remove(this);
 
-		this._isAwake = false;
+		this._isActive = false;
 
 		if (this._onStopCallback) {
 			this._onStopCallback(this._object, this);
@@ -235,9 +256,9 @@ export class Spring<Target> implements IUpdateable {
 	 * @param keepAwake - if true, the spring will stay awake.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public end(keepAwake?: boolean): this {
-		this._setToEnd(this._object, this._valuesEnd, this._valuesChangeRate);
-		this._isAwake = keepAwake && this._isAwake;
+	public end(): this {
+		this.update(Infinity);
+		this._isActive = false;
 		return this;
 	}
 
@@ -296,8 +317,14 @@ export class Spring<Target> implements IUpdateable {
 	 * @param callback - the function to call on start. It will recieve the target object and this spring as a parameter.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public onAwake(callback: (object: Target, tween: this) => void): this {
+	public onAwake(callback: (object: Target, spring: this) => void): this {
 		this._onAwakeCallback = callback;
+
+		return this;
+	}
+
+	public onActivate(callback: (object: Target, spring: this) => void): this {
+		this._onActivateCallback = callback;
 
 		return this;
 	}
@@ -307,7 +334,7 @@ export class Spring<Target> implements IUpdateable {
 	 * @param callback - the function to call on start. It will recieve the target object and this spring as a parameter.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public onAfterDelay(callback: (object: Target, tween: this) => void): this {
+	public onAfterDelay(callback: (object: Target, spring: this) => void): this {
 		this._onAfterDelayCallback = callback;
 
 		return this;
@@ -329,7 +356,7 @@ export class Spring<Target> implements IUpdateable {
 	 * @param callback - the function to call on complete. It will recieve the target object and this spring as a parameter.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public onSleep(callback: (object: Target, tween: this) => void): this {
+	public onSleep(callback: (object: Target, spring: this) => void): this {
 		this._onSleepCallback = callback;
 
 		return this;
@@ -340,7 +367,7 @@ export class Spring<Target> implements IUpdateable {
 	 * @param callback - the function to call on stop. It will recieve the target object and this spring as a parameter.
 	 * @returns returns this spring for daisy chaining methods.
 	 */
-	public onStop(callback: (object: Target, tween: this) => void): this {
+	public onStop(callback: (object: Target, spring: this) => void): this {
 		this._onStopCallback = callback;
 
 		return this;
@@ -353,19 +380,25 @@ export class Spring<Target> implements IUpdateable {
 	 * @returns returns true if the tween hasn't finished yet.
 	 */
 	public update(deltaTime: number, preserve: boolean = false): boolean {
+		if (!this._safetyCheckFunction(this._object)) {
+			this.destroy();
+			return false;
+		}
+		// WARN: Negative delta time won't play nice here.
 		const retval = this._internalUpdate(deltaTime);
-		if (!retval && !preserve) {
-			this._group.remove(this);
+		if (!retval && (!preserve || !this._preserveAfterSleep)) {
+			this.destroy();
 		}
 		return retval;
 	}
+	public destroy(): void {
+		this._group.remove(this);
+		this._isActive = false;
+		this._isAwake = false;
+	}
 
 	private _internalUpdate(deltaTime: number): boolean {
-		if (!this._safetyCheckFunction(this._object)) {
-			return false;
-		}
-
-		if (!this._isAwake) {
+		if (!this._isActive) {
 			return false;
 		}
 
@@ -373,14 +406,17 @@ export class Spring<Target> implements IUpdateable {
 
 		this._elapsedTime += deltaTime;
 
-		if (this._onAwakeCallbackFired == false) {
-			if (this._onAwakeCallback) {
-				this._onAwakeCallback(this._object, this);
+		if (this._onActivateCallbackFired == false) {
+			if (this._onActivateCallback) {
+				this._onActivateCallback(this._object, this);
 			}
 
-			this._onAwakeCallbackFired = true;
+			this._onActivateCallbackFired = true;
 		}
 
+		if (this._elapsedTime < this._delayTime) {
+			return true;
+		}
 		if (this._onAfterDelayCallbackFired == false && this._elapsedTime >= this._delayTime) {
 			if (this._onAfterDelayCallback) {
 				this._onAfterDelayCallback(this._object, this);
@@ -389,30 +425,27 @@ export class Spring<Target> implements IUpdateable {
 			this._onAfterDelayCallbackFired = true;
 		}
 
-		let didUpdate = false;
-		do {
-			const dt = Math.min(deltaTime, this._substepTime);
+		const wasAwake = this._isAwake;
 
-			didUpdate = this._updateProperties(this._object, this._valuesEnd, this._valuesChangeRate, dt) || didUpdate;
-
-			deltaTime -= dt;
-		} while (deltaTime > 0);
+		this._isAwake = this._updateProperties(this._object, this._valuesEnd, this._valuesChangeRate, deltaTime) || this._isAwake;
 
 		if (this._onUpdateCallback) {
 			this._onUpdateCallback(this._object, this);
 		}
 
-		if (!didUpdate) {
+		if (!this._isAwake && wasAwake) {
 			if (this._onSleepCallback) {
 				this._onSleepCallback(this._object, this);
 			}
-
-			this._isAwake = false;
-
-			return false;
 		}
 
-		return true;
+		if (this._isAwake && !wasAwake) {
+			if (this._onAwakeCallback) {
+				this._onAwakeCallback(this._object, this);
+			}
+		}
+
+		return this._isAwake;
 	}
 
 	private static _auxSpringValues = { value: 0, rate: 0 };
@@ -521,37 +554,5 @@ export class Spring<Target> implements IUpdateable {
 			}
 		}
 		return retval;
-	}
-
-	// Pretty much, a deep assign.
-	private _setToEnd(_object: any, _valuesEnd: any, _valuesRate: any): void {
-		for (const property in _valuesEnd) {
-			// Don't update properties that do not exist in the source object
-			if (_object[property] == undefined) {
-				continue;
-			}
-
-			const end = _valuesEnd[property];
-
-			if (typeof end == "object" && end) {
-				// Fill rate in case it's not a thing
-				if (_valuesRate[property] == undefined) {
-					_valuesRate[property] = {};
-				}
-				this._setToEnd(_object[property], end, _valuesRate[property]);
-			} else {
-				const current = _object[property];
-
-				if (typeof end == "number" && (typeof current == "number" || typeof current == "string")) {
-					_object[property] = end;
-					_valuesRate[property] = 0;
-
-					// if it was originally a string, we make it back to string. keep it tidy
-					if (typeof current == "string") {
-						_object[property] = String(_object[property]);
-					}
-				}
-			}
-		}
 	}
 }

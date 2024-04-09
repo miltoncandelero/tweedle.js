@@ -1,3 +1,7 @@
+// TODO: Move preserve to the tween and remove from the group
+// TODO: Introduce destroy method
+// TODO: Introduce "isDestroyed" property
+// TODO: Introduce "OnDestroy" callback
 import type { EasingFunction } from "./Easing";
 import type { InterpolationFunction } from "./Interpolation";
 import { Group } from "./Group";
