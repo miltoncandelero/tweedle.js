@@ -67,7 +67,6 @@
     "clean:docs": "rimraf ./docs",
     "bundle": "rollup -c",
     "types": "tsc --outDir compile --project tsconfig.types.json && api-extractor run && rimraf compile",
-    "prepublishOnly": "run-s test build doc",
     "test": "jest",
     "doc": "typedoc"
   }
